@@ -586,6 +586,13 @@ auth.onAuthStateChanged(async user=>{
     if(doc.exists){
       userData=doc.data();
       if(userData.role==='admin'){window.location.href='admin.html';return;}
+      // Phone verification check — only block if explicitly false (new users)
+      // Existing users without phoneVerified field are allowed through
+      if(userData.phoneVerified===false){
+        await auth.signOut();
+        window.location.href='/';
+        return;
+      }
       renderUserData();
     }
   }catch(e){}
