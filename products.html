@@ -196,7 +196,15 @@ auth.onAuthStateChanged(async user => {
     currentUser = user;
     try {
       const doc = await db.collection('users').doc(user.uid).get();
-      if (doc.exists) userData = doc.data();
+      if (doc.exists){
+        userData = doc.data();
+        // Phone verification check
+        if(userData.phoneVerified===false){
+          await auth.signOut();
+          window.location.href='/';
+          return;
+        }
+      }
     } catch(e) {}
   }
   loadCategoryAndProducts();
@@ -403,7 +411,7 @@ async function confirmBuy() {
 }
 
 function openTG()   { window.open(siteSettings.tg||'https://t.me/adtgroups','_blank'); }
-function openHelp() { window.open(siteSettings.help||'https://wa.me/919999999999','_blank'); }
+function openHelp() { window.location.href='support.html'; }
 window.addEventListener('load', () => initDraggable('float-widget'));
 </script>
 </body>
