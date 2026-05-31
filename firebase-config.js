@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════
 const firebaseConfig = {
   apiKey:            "AIzaSyCbNa8LYblS0DNWFghfFqiMdc5r_exrsKo",
-  authDomain:        "newforadt.firebaseapp.com",
+  authDomain:        "adt-groupsltd.vercel.app",
   projectId:         "newforadt",
   storageBucket:     "newforadt.firebasestorage.app",
   messagingSenderId: "269144820825",
