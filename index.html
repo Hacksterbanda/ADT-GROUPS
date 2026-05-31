@@ -603,9 +603,9 @@ async function doGoogleAuth(){
   hideMsg('login-err');hideMsg('reg-err');
   try{
     const provider=new firebase.auth.GoogleAuthProvider();
-    await auth.signInWithRedirect(provider);
+    await auth.signInWithPopup(provider);
   }catch(e){
-    showMsg('login-err','Google sign-in failed: '+e.message);
+    if(e.code!=='auth/popup-closed-by-user')showMsg('login-err','Google sign-in failed: '+e.message);
   }
 }
 
@@ -614,9 +614,9 @@ async function doGoogleAuthForgot(){
   try{
     const provider=new firebase.auth.GoogleAuthProvider();
     if(_forgotEmail)provider.setCustomParameters({login_hint:_forgotEmail});
-    await auth.signInWithRedirect(provider);
+    await auth.signInWithPopup(provider);
   }catch(e){
-    showMsg('forgot-err','Google sign-in failed: '+e.message);
+    if(e.code!=='auth/popup-closed-by-user')showMsg('forgot-err','Google sign-in failed: '+e.message);
   }
 }
 
