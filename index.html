@@ -514,14 +514,15 @@ auth.onAuthStateChanged(async user=>{
         referredBy:refCode||'',
         createdAt:firebase.firestore.FieldValue.serverTimestamp()
       });
-      window.location.href='/dashboard';
+      window.location.replace('/dashboard');
     }
     // Email user — doRegister() will handle doc creation, then redirect happens
   }catch(e){console.error(e);}
 });
 
 function redirectUser(user,data){
-  window.location.href=data.role==='admin'?'admin.html':'/dashboard';
+  const dest=data&&data.role==='admin'?'/admin.html':'/dashboard';
+  window.location.replace(dest);
 }
 
 // ── LOAD DATA ───────────────────────────────────────────────
@@ -575,7 +576,7 @@ async function doRegister(){
       });
     }
     showMsg('reg-ok',t('account_created'),'success');
-    setTimeout(()=>window.location.href='/dashboard',1500);
+    setTimeout(()=>window.location.replace('/dashboard'),1500);
   }catch(e){
     showMsg('reg-err',e.code==='auth/email-already-in-use'?t('email_exists'):e.message);
     btn.disabled=false;btn.textContent='Create Account →';
