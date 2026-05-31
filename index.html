@@ -413,66 +413,32 @@ nav.scrolled{box-shadow:0 8px 40px rgba(0,0,0,0.55);}
       <div style="text-align:center;margin-top:13px;"><a onclick="switchAuthTab('forgot')" style="font-size:13px;color:var(--gold2);cursor:pointer;">🔑 Forgot Password?</a></div>
     </div>
 
-    <!-- REGISTER — Step 1: Details -->
+    <!-- REGISTER -->
     <div class="auth-form" id="form-register">
       <div class="msg-error" id="reg-err"></div>
       <div class="msg-success" id="reg-ok"></div>
-      <!-- Step indicator -->
-      <div class="step-dots" style="margin-bottom:18px;">
-        <div class="step-dot done" id="rs1"></div>
-        <div class="step-dot" id="rs2"></div>
-        <div class="step-dot" id="rs3"></div>
+      <div class="form-group"><label class="form-label">Full Name</label><input class="form-input" id="r-name" type="text" placeholder="Your full name" autocomplete="name"></div>
+      <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" id="r-email" type="email" placeholder="your@email.com" autocomplete="email"></div>
+      <div class="form-group"><label class="form-label">Mobile Number</label><input class="form-input" id="r-phone" type="tel" placeholder="+91 XXXXX XXXXX" autocomplete="tel"></div>
+      <div class="form-group"><label class="form-label">Password</label><input class="form-input" id="r-pass" type="password" placeholder="Minimum 6 characters" autocomplete="new-password"></div>
+
+      <!-- Recovery box — screenshot warning -->
+      <div class="recovery-box">
+        <div class="recovery-icon">🔑</div>
+        <div class="recovery-title">Recovery Secret Text — Important!</div>
+        <div class="recovery-text">This is used to recover your account if you forget your password. <strong style="color:var(--gold2);">📸 Note it down or take a screenshot — you will need it!</strong></div>
+      </div>
+      <div class="form-group">
+        <input class="form-input" id="r-recovery" type="text" placeholder="Your secret phrase (e.g. my first pet name)" autocomplete="off">
+        <div class="form-hint" style="color:var(--gold2);font-weight:600;">⚠️ Screenshot this or write it down — needed for password recovery</div>
       </div>
 
-      <!-- STEP 1: Basic Info -->
-      <div class="forgot-step active" id="reg-s1">
-        <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:14px;">Step 1 — Basic Details</div>
-        <div class="form-group"><label class="form-label">Full Name</label><input class="form-input" id="r-name" type="text" placeholder="Your full name"></div>
-        <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" id="r-email" type="email" placeholder="your@email.com"></div>
-        <div class="form-group"><label class="form-label">Password</label><input class="form-input" id="r-pass" type="password" placeholder="Minimum 6 characters"></div>
-        <div class="recovery-box"><div class="recovery-icon">🔑</div><div class="recovery-title">Recovery Secret Text</div><div class="recovery-text">Only you should know this. Used to recover your account if you forget your password.</div></div>
-        <div class="form-group"><input class="form-input" id="r-recovery" type="text" placeholder="Your secret phrase (e.g. my first pet name)"><div class="form-hint">⚠️ Do not forget this — required for account recovery</div></div>
-        <button class="btn btn-gold btn-full btn-lg" id="reg-next-btn" onclick="regGoStep2()">Next → Verify Phone</button>
-        <div style="display:flex;align-items:center;gap:10px;margin:14px 0;"><div style="flex:1;height:1px;background:var(--border);"></div><span style="font-size:11px;color:var(--text3);">OR</span><div style="flex:1;height:1px;background:var(--border);"></div></div>
-        <button class="btn btn-ghost btn-full" onclick="doGoogleAuth()" style="display:flex;align-items:center;justify-content:center;gap:10px;">
-          <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 33.2 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 19.7-8 19.7-20 0-1.3-.1-2.7-.1-4z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.1 19 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.5 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-1.9 13.5-5l-6.2-5.2C29.4 35.6 26.8 36 24 36c-5.2 0-9.6-2.8-11.3-7L6 34.3C9.4 39.7 16.3 44 24 44z"/><path fill="#1976D2" d="M43.6 20H24v8h11.3c-.9 2.5-2.6 4.6-4.8 6l6.2 5.2C40.6 35.5 44 30.2 44 24c0-1.3-.1-2.7-.4-4z"/></svg>
-          Sign up with Google
-        </button>
-      </div>
-
-      <!-- STEP 2: Phone OTP -->
-      <div class="forgot-step" id="reg-s2">
-        <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:14px;">Step 2 — Verify Phone Number</div>
-        <div class="form-group">
-          <label class="form-label">Mobile Number</label>
-          <input class="form-input" id="r-phone" type="tel" placeholder="+91 00000 00000">
-          <div class="form-hint">Enter with country code e.g. +91XXXXXXXXXX</div>
-        </div>
-        <div id="recaptcha-container"></div>
-        <button class="btn btn-gold btn-full btn-lg" id="send-otp-btn" onclick="sendOTP()">Send OTP →</button>
-        <button class="btn btn-ghost btn-full" style="margin-top:8px;" onclick="regBackStep1()">← Back</button>
-      </div>
-
-      <!-- STEP 3: Enter OTP -->
-      <div class="forgot-step" id="reg-s3">
-        <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:6px;">Step 3 — Enter OTP</div>
-        <div class="phone-display">
-          <span style="font-size:12px;color:var(--text3);">OTP sent to</span>
-          <span class="phone-display-num" id="otp-phone-display">+91XXXXXXXXXX</span>
-        </div>
-        <div class="otp-wrap">
-          <input class="otp-inp" id="otp1" maxlength="1" type="text" inputmode="numeric" oninput="otpMove(this,'otp2')" onkeydown="otpBack(event,this,'')">
-          <input class="otp-inp" id="otp2" maxlength="1" type="text" inputmode="numeric" oninput="otpMove(this,'otp3')" onkeydown="otpBack(event,this,'otp1')">
-          <input class="otp-inp" id="otp3" maxlength="1" type="text" inputmode="numeric" oninput="otpMove(this,'otp4')" onkeydown="otpBack(event,this,'otp2')">
-          <input class="otp-inp" id="otp4" maxlength="1" type="text" inputmode="numeric" oninput="otpMove(this,'otp5')" onkeydown="otpBack(event,this,'otp3')">
-          <input class="otp-inp" id="otp5" maxlength="1" type="text" inputmode="numeric" oninput="otpMove(this,'otp6')" onkeydown="otpBack(event,this,'otp4')">
-          <input class="otp-inp" id="otp6" maxlength="1" type="text" inputmode="numeric" oninput="otpMove(this,'')" onkeydown="otpBack(event,this,'otp5')">
-        </div>
-        <div class="otp-timer">OTP expires in <span id="otp-timer-val">60</span>s</div>
-        <div class="otp-resend" id="otp-resend-wrap" style="display:none;">Didn't receive? <a onclick="resendOTP()">Resend OTP</a></div>
-        <button class="btn btn-gold btn-full btn-lg" id="verify-otp-btn" onclick="verifyOTP()">Verify & Create Account ✓</button>
-        <button class="btn btn-ghost btn-full" style="margin-top:8px;" onclick="regBackStep2()">← Change Number</button>
-      </div>
+      <button class="btn btn-gold btn-full btn-lg" id="reg-btn" onclick="doRegister()">Create Account →</button>
+      <div style="display:flex;align-items:center;gap:10px;margin:14px 0;"><div style="flex:1;height:1px;background:var(--border);"></div><span style="font-size:11px;color:var(--text3);">OR</span><div style="flex:1;height:1px;background:var(--border);"></div></div>
+      <button class="btn btn-ghost btn-full" onclick="doGoogleAuth()" style="display:flex;align-items:center;justify-content:center;gap:10px;">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 33.2 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 19.7-8 19.7-20 0-1.3-.1-2.7-.1-4z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.1 19 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.5 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-1.9 13.5-5l-6.2-5.2C29.4 35.6 26.8 36 24 36c-5.2 0-9.6-2.8-11.3-7L6 34.3C9.4 39.7 16.3 44 24 44z"/><path fill="#1976D2" d="M43.6 20H24v8h11.3c-.9 2.5-2.6 4.6-4.8 6l6.2 5.2C40.6 35.5 44 30.2 44 24c0-1.3-.1-2.7-.4-4z"/></svg>
+        Sign up with Google
+      </button>
     </div>
 
     <!-- FORGOT -->
@@ -487,8 +453,15 @@ nav.scrolled{box-shadow:0 8px 40px rgba(0,0,0,0.55);}
         <button class="btn btn-gold btn-full" id="verify-btn" onclick="doForgotVerify()">Verify →</button>
       </div>
       <div class="forgot-step" id="fs2">
-        <div class="form-group"><label class="form-label">New Password</label><input class="form-input" id="f-newpass" type="password" placeholder="New strong password (min 6 chars)"></div>
-        <button class="btn btn-green btn-full" id="reset-btn" onclick="doResetPass()">Set New Password ✓</button>
+        <div style="background:var(--green-dim);border:1px solid rgba(29,185,84,0.2);border-radius:12px;padding:14px;margin-bottom:16px;font-size:13px;color:var(--green2);line-height:1.5;">
+          ✅ Identity verified! A password reset link will be sent to your email.
+        </div>
+        <button class="btn btn-green btn-full btn-lg" id="reset-btn" onclick="doResetPass()">Send Reset Link →</button>
+        <div style="display:flex;align-items:center;gap:10px;margin:14px 0;"><div style="flex:1;height:1px;background:var(--border);"></div><span style="font-size:11px;color:var(--text3);">OR login with same email</span><div style="flex:1;height:1px;background:var(--border);"></div></div>
+        <button class="btn btn-ghost btn-full" onclick="doGoogleAuthForgot()" style="display:flex;align-items:center;justify-content:center;gap:10px;">
+          <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 33.2 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 19.7-8 19.7-20 0-1.3-.1-2.7-.1-4z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.1 19 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.5 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-1.9 13.5-5l-6.2-5.2C29.4 35.6 26.8 36 24 36c-5.2 0-9.6-2.8-11.3-7L6 34.3C9.4 39.7 16.3 44 24 44z"/><path fill="#1976D2" d="M43.6 20H24v8h11.3c-.9 2.5-2.6 4.6-4.8 6l6.2 5.2C40.6 35.5 44 30.2 44 24c0-1.3-.1-2.7-.4-4z"/></svg>
+          Continue with Google (same email)
+        </button>
       </div>
       <div class="auth-switch"><a onclick="switchAuthTab('login')">← Back to Login</a></div>
     </div>
@@ -512,10 +485,6 @@ nav.scrolled{box-shadow:0 8px 40px rgba(0,0,0,0.55);}
 <script>
 let siteSettings={tg:'https://t.me/adtgroups',help:'support.html'};
 let _forgotEmail='';
-let _confirmResult=null;
-let _otpTimer=null;
-let _googlePendingUser=null; // for google sign-in OTP flow
-
 const urlParams=new URLSearchParams(window.location.search);
 const refCode=urlParams.get('ref')||'';
 
@@ -526,22 +495,28 @@ auth.onAuthStateChanged(async user=>{
   try{
     const doc=await db.collection('users').doc(user.uid).get();
     if(doc.exists){
-      const data=doc.data();
-      // Already verified — redirect
-      if(data.phoneVerified===true){
-        redirectUser(user,data);
-        return;
-      }
-      // Explicitly not verified — show OTP
-      if(data.phoneVerified===false){
-        _googlePendingUser=user;
-        showGoogleOTPStep(user);
-        return;
-      }
+      // Existing user — just redirect
+      redirectUser(user,doc.data());
+      return;
     }
-    // No Firestore doc yet (new Google user) — show OTP
-    _googlePendingUser=user;
-    showGoogleOTPStep(user);
+    // No doc — only create if Google user (email users create their own doc in doRegister)
+    const isGoogle=user.providerData.some(p=>p.providerId==='google.com');
+    if(isGoogle){
+      const myRefCode=generateRefCode(user.uid);
+      await db.collection('users').doc(user.uid).set({
+        name:user.displayName||'Investor',
+        email:user.email||'',
+        phone:'',
+        recoveryText:'',
+        balance:0,invested:0,returns:0,
+        role:'user',
+        referralCode:myRefCode,
+        referredBy:refCode||'',
+        createdAt:firebase.firestore.FieldValue.serverTimestamp()
+      });
+      window.location.href='/dashboard';
+    }
+    // Email user — doRegister() will handle doc creation, then redirect happens
   }catch(e){console.error(e);}
 });
 
@@ -559,7 +534,7 @@ async function loadData(){
     if(settingsDoc.exists)siteSettings={...siteSettings,...settingsDoc.data()};
     catsSnap.forEach(d=>{
       const cat=d.data(),id=d.id;
-      if(cat.image){const el=document.getElementById('cat-img-'+id);if(el)el.style.backgroundImage=`url('${cat.image}')`;}
+      if(cat.image){const el=document.getElementById('cat-img-'+id);if(el)el.style.backgroundImage=`url('${cat.image}')`;} 
       if(cat.name){const el=document.getElementById('cat-name-'+id);if(el)el.textContent=cat.name;}
       if(cat.description){const el=document.getElementById('cat-desc-'+id);if(el)el.textContent=cat.description;}
     });
@@ -567,229 +542,43 @@ async function loadData(){
 }
 loadData();
 
-// ── RECAPTCHA ───────────────────────────────────────────────
-function initRecaptcha(){
-  if(window.recaptchaVerifier)return;
-  window.recaptchaVerifier=new firebase.auth.RecaptchaVerifier('recaptcha-container',{
-    size:'normal',
-    callback:()=>{document.getElementById('send-otp-btn').disabled=false;},
-    'expired-callback':()=>{
-      window.recaptchaVerifier.clear();
-      window.recaptchaVerifier=null;
-      initRecaptcha();
-    }
-  });
-  window.recaptchaVerifier.render().catch(()=>{});
-}
-
-// ── REGISTER STEPS ──────────────────────────────────────────
-function regGoStep2(){
+// ── REGISTER ────────────────────────────────────────────────
+async function doRegister(){
   const name=document.getElementById('r-name').value.trim();
   const email=document.getElementById('r-email').value.trim();
+  const phone=document.getElementById('r-phone').value.trim();
   const pass=document.getElementById('r-pass').value;
   const recovery=document.getElementById('r-recovery').value.trim();
   hideMsg('reg-err');
   if(!name||!email||!pass||!recovery){showMsg('reg-err',t('all_fields'));return;}
   if(pass.length<6){showMsg('reg-err',t('pass_short'));return;}
   if(recovery.length<3){showMsg('reg-err',t('recovery_short'));return;}
-  document.getElementById('reg-s1').classList.remove('active');
-  document.getElementById('reg-s2').classList.add('active');
-  document.getElementById('rs2').classList.add('done');
-  initRecaptcha();
-}
-
-function regBackStep1(){
-  document.getElementById('reg-s2').classList.remove('active');
-  document.getElementById('reg-s1').classList.add('active');
-  document.getElementById('rs2').classList.remove('done');
-  hideMsg('reg-err');
-}
-
-function regBackStep2(){
-  clearInterval(_otpTimer);
-  document.getElementById('reg-s3').classList.remove('active');
-  document.getElementById('reg-s2').classList.add('active');
-  document.getElementById('rs3').classList.remove('done');
-  ['otp1','otp2','otp3','otp4','otp5','otp6'].forEach(id=>{
-    const el=document.getElementById(id);if(el){el.value='';el.classList.remove('filled');}
-  });
-  hideMsg('reg-err');
-}
-
-// ── SEND OTP ────────────────────────────────────────────────
-async function sendOTP(){
-  let phone=document.getElementById('r-phone').value.trim();
-  if(!phone){showMsg('reg-err','Please enter your mobile number.');return;}
-  // Auto add +91 if missing
-  if(!phone.startsWith('+')){phone='+91'+phone.replace(/\D/g,'').slice(-10);}
-  if(phone.replace(/\D/g,'').length<10){showMsg('reg-err','Enter a valid 10-digit mobile number.');return;}
-
-  const btn=document.getElementById('send-otp-btn');
-  btn.disabled=true;btn.textContent='Sending OTP...';
-  hideMsg('reg-err');
-
+  const btn=document.getElementById('reg-btn');
+  btn.disabled=true;btn.textContent='Creating account...';
   try{
-    if(!window.recaptchaVerifier)initRecaptcha();
-    _confirmResult=await auth.signInWithPhoneNumber(phone,window.recaptchaVerifier);
-    // Go to step 3
-    document.getElementById('r-phone').value=phone;
-    document.getElementById('otp-phone-display').textContent=phone;
-    document.getElementById('reg-s2').classList.remove('active');
-    document.getElementById('reg-s3').classList.add('active');
-    document.getElementById('rs3').classList.add('done');
-    startOTPTimer();
-    document.getElementById('otp1').focus();
-  }catch(e){
-    showMsg('reg-err','Failed to send OTP: '+e.message);
-    btn.disabled=false;btn.textContent='Send OTP →';
-    if(window.recaptchaVerifier){window.recaptchaVerifier.clear();window.recaptchaVerifier=null;}
-  }
-}
-
-function startOTPTimer(){
-  let secs=60;
-  document.getElementById('otp-timer-val').textContent=secs;
-  document.getElementById('otp-resend-wrap').style.display='none';
-  clearInterval(_otpTimer);
-  _otpTimer=setInterval(()=>{
-    secs--;
-    const el=document.getElementById('otp-timer-val');
-    if(el)el.textContent=secs;
-    if(secs<=0){
-      clearInterval(_otpTimer);
-      const resend=document.getElementById('otp-resend-wrap');
-      if(resend)resend.style.display='block';
-    }
-  },1000);
-}
-
-async function resendOTP(){
-  regBackStep2();
-  setTimeout(()=>sendOTP(),300);
-}
-
-// OTP input helpers
-function otpMove(el,nextId){
-  el.value=el.value.replace(/\D/g,'');
-  if(el.value){el.classList.add('filled');if(nextId)document.getElementById(nextId)?.focus();}
-  else el.classList.remove('filled');
-}
-function otpBack(e,el,prevId){
-  if(e.key==='Backspace'&&!el.value&&prevId){
-    const prev=document.getElementById(prevId);
-    if(prev){prev.value='';prev.classList.remove('filled');prev.focus();}
-  }
-}
-
-// ── VERIFY OTP & CREATE ACCOUNT ─────────────────────────────
-async function verifyOTP(){
-  const otp=['otp1','otp2','otp3','otp4','otp5','otp6'].map(id=>document.getElementById(id).value).join('');
-  if(otp.length<6){showMsg('reg-err','Please enter the complete 6-digit OTP.');return;}
-  if(!_confirmResult){showMsg('reg-err','Session expired. Please resend OTP.');return;}
-
-  const btn=document.getElementById('verify-otp-btn');
-  btn.disabled=true;btn.textContent='Verifying...';
-  hideMsg('reg-err');
-
-  try{
-    // Verify OTP
-    const phoneCredential=await _confirmResult.confirm(otp);
-    const phone=document.getElementById('r-phone').value.trim();
-
-    // Check if this is a Google user flow
-    const isGoogleUser=_googlePendingUser!==null;
-
-    if(isGoogleUser){
-      // Google user — already has Firebase account, just save to Firestore
-      const user=_googlePendingUser;
-      const uid=user.uid;
-      btn.textContent='Saving...';
-
-      // Check if already exists in Firestore
-      const existingDoc=await db.collection('users').doc(uid).get();
-      if(existingDoc.exists && existingDoc.data().phoneVerified){
-        // Already done — just redirect
-        clearInterval(_otpTimer);
-        window.location.href='/dashboard';
-        return;
-      }
-
-      const myRefCode=generateRefCode(uid);
-      await db.collection('users').doc(uid).set({
-        name: user.displayName||'Investor',
-        email: user.email||'',
-        phone: phone,
-        recoveryText: '',
-        balance:0,invested:0,returns:0,
-        role:'user',
-        referralCode:myRefCode,
-        referredBy:refCode||'',
-        phoneVerified:true,
-        createdAt:firebase.firestore.FieldValue.serverTimestamp()
-      },{merge:true});
-
-      clearInterval(_otpTimer);
-      _googlePendingUser=null;
-      showMsg('reg-ok','✅ Verified! Redirecting...','success');
-      setTimeout(()=>window.location.href='/dashboard',1200);
-      return;
-    }
-
-    // Normal signup flow
-    const name=document.getElementById('r-name').value.trim();
-    const email=document.getElementById('r-email').value.trim();
-    const pass=document.getElementById('r-pass').value;
-    const recovery=document.getElementById('r-recovery').value.trim();
-
-    if(!name||!email||!pass||!recovery){
-      showMsg('reg-err','Please go back and fill all details.');
-      btn.disabled=false;btn.textContent='Verify & Create Account ✓';
-      return;
-    }
-
-    btn.textContent='Creating account...';
-
-    // Sign out phone user, create email account
-    await auth.signOut();
-    let uid;
-    try{
-      const emailCred=await auth.createUserWithEmailAndPassword(email,pass);
-      uid=emailCred.user.uid;
-    }catch(e){
-      if(e.code==='auth/email-already-in-use'){showMsg('reg-err',t('email_exists'));}
-      else{showMsg('reg-err',e.message);}
-      btn.disabled=false;btn.textContent='Verify & Create Account ✓';
-      return;
-    }
-
+    const cred=await auth.createUserWithEmailAndPassword(email,pass);
+    const uid=cred.user.uid;
     const myRefCode=generateRefCode(uid);
     await db.collection('users').doc(uid).set({
-      name,email,phone,
+      name,email,phone:phone||'',
       recoveryText:encryptStr(recovery),
       balance:0,invested:0,returns:0,
       role:'user',
       referralCode:myRefCode,
       referredBy:refCode||'',
-      phoneVerified:true,
       createdAt:firebase.firestore.FieldValue.serverTimestamp()
     });
-
     if(refCode){
       await db.collection('referrals').add({
         refCode,newUserId:uid,newUserEmail:email,
         status:'pending',createdAt:firebase.firestore.FieldValue.serverTimestamp()
       });
     }
-
-    clearInterval(_otpTimer);
     showMsg('reg-ok',t('account_created'),'success');
     setTimeout(()=>window.location.href='/dashboard',1500);
-
   }catch(e){
-    if(e.code==='auth/invalid-verification-code'){showMsg('reg-err','Incorrect OTP. Please try again.');}
-    else if(e.code==='auth/code-expired'){showMsg('reg-err','OTP expired. Please resend.');}
-    else{showMsg('reg-err','Error: '+e.message);}
-    btn.disabled=false;btn.textContent='Verify & Create Account ✓';
+    showMsg('reg-err',e.code==='auth/email-already-in-use'?t('email_exists'):e.message);
+    btn.disabled=false;btn.textContent='Create Account →';
   }
 }
 
@@ -799,42 +588,25 @@ async function doGoogleAuth(){
   try{
     const provider=new firebase.auth.GoogleAuthProvider();
     await auth.signInWithPopup(provider);
-    // onAuthStateChanged will handle redirect or OTP step
   }catch(e){
-    if(e.code!=='auth/popup-closed-by-user'){
-      showMsg('login-err','Google sign-in failed: '+e.message);
-    }
+    if(e.code!=='auth/popup-closed-by-user')showMsg('login-err','Google sign-in failed: '+e.message);
   }
 }
 
-// If Google user has no phone — show OTP step
-function showGoogleOTPStep(user){
-  document.querySelectorAll('.auth-form').forEach(f=>f.classList.remove('active'));
-  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('form-register').classList.add('active');
-  document.querySelectorAll('.auth-tab')[1].classList.add('active');
-  document.getElementById('auth-overlay').classList.add('open');
-  document.body.style.overflow='hidden';
-
-  // Show step 2 directly (phone step)
-  document.getElementById('reg-s1').classList.remove('active');
-  document.getElementById('reg-s3').classList.remove('active');
-  document.getElementById('reg-s2').classList.add('active');
-  document.getElementById('rs1').classList.add('done');
-  document.getElementById('rs2').classList.add('done');
-
-  // Pre-fill from Google
-  const nameEl=document.getElementById('r-name');
-  const emailEl=document.getElementById('r-email');
-  if(nameEl&&user.displayName)nameEl.value=user.displayName;
-  if(emailEl&&user.email)emailEl.value=user.email;
-
-  // Use error type (not 'info' which doesn't exist)
-  showMsg('reg-err','📱 One last step! Verify your phone number to continue.','error');
-  initRecaptcha();
+// Google login from forgot password — uses same email
+async function doGoogleAuthForgot(){
+  hideMsg('forgot-err');
+  try{
+    const provider=new firebase.auth.GoogleAuthProvider();
+    if(_forgotEmail)provider.setCustomParameters({login_hint:_forgotEmail});
+    await auth.signInWithPopup(provider);
+    // onAuthStateChanged will redirect
+  }catch(e){
+    if(e.code!=='auth/popup-closed-by-user')showMsg('forgot-err','Google sign-in failed: '+e.message);
+  }
 }
 
-// ── LOGIN ───────────────────────────────────────────────────
+// ── LOGIN ────────────────────────────────────────────────────
 async function doLogin(){
   const email=document.getElementById('l-email').value.trim();
   const pass=document.getElementById('l-pass').value;
@@ -849,13 +621,14 @@ async function doLogin(){
   }
 }
 
-// ── FORGOT PASSWORD ─────────────────────────────────────────
+// ── FORGOT PASSWORD ──────────────────────────────────────────
 async function doForgotVerify(){
   const email=document.getElementById('f-email').value.trim();
   const recovery=document.getElementById('f-recovery').value.trim();
   if(!email||!recovery){showMsg('forgot-err','Please fill both fields.');return;}
   const btn=document.getElementById('verify-btn');
   btn.disabled=true;btn.textContent='Verifying...';
+  hideMsg('forgot-err');
   try{
     const snap=await db.collection('users').where('email','==',email).limit(1).get();
     if(snap.empty){showMsg('forgot-err',t('email_not_found'));btn.disabled=false;btn.textContent='Verify →';return;}
@@ -875,18 +648,20 @@ async function doForgotVerify(){
 }
 
 async function doResetPass(){
-  const newpass=document.getElementById('f-newpass').value;
-  if(!newpass||newpass.length<6){showMsg('forgot-err',t('pass_short'));return;}
   const btn=document.getElementById('reset-btn');
-  btn.disabled=true;btn.textContent='Sending...';
+  btn.disabled=true;btn.textContent='Sending reset email...';
   try{
     await auth.sendPasswordResetEmail(_forgotEmail);
-    showMsg('forgot-ok',t('reset_sent'),'success');
-    setTimeout(()=>switchAuthTab('login'),3000);
-  }catch(e){showMsg('forgot-err',e.message);btn.disabled=false;btn.textContent='Set New Password ✓';}
+    showMsg('forgot-ok','✅ Reset link sent to '+_forgotEmail+'! Check inbox + spam folder.','success');
+    setTimeout(()=>switchAuthTab('login'),4000);
+  }catch(e){
+    if(e.code==='auth/user-not-found'){showMsg('forgot-err','No account found with this email.');}
+    else{showMsg('forgot-err',e.message);}
+    btn.disabled=false;btn.textContent='Send Reset Link →';
+  }
 }
 
-// ── MISC ────────────────────────────────────────────────────
+// ── UI HELPERS ────────────────────────────────────────────────
 window.addEventListener('scroll',()=>{
   document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>20);
 });
@@ -918,7 +693,7 @@ function switchAuthTab(tab){
     document.getElementById('sd1').classList.add('done');
     document.getElementById('sd2').classList.remove('done');
   }
-  document.getElementById('auth-tabs').style.display=['forgot'].includes(tab)?'none':'flex';
+  document.getElementById('auth-tabs').style.display=tab==='forgot'?'none':'flex';
   ['login-err','reg-err','reg-ok','forgot-err','forgot-ok'].forEach(hideMsg);
 }
 function openTG(){window.open(siteSettings.tg||'https://t.me/adtgroups','_blank');}
