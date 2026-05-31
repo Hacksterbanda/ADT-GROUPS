@@ -488,6 +488,13 @@ let _forgotEmail='';
 const urlParams=new URLSearchParams(window.location.search);
 const refCode=urlParams.get('ref')||'';
 
+// ── HANDLE REDIRECT RESULT ──────────────────────────────────
+auth.getRedirectResult().then(result=>{
+  // Redirect result handled by onAuthStateChanged
+}).catch(e=>{
+  if(e.code!=='auth/no-current-user')console.error(e);
+});
+
 // ── AUTH STATE ──────────────────────────────────────────────
 auth.onAuthStateChanged(async user=>{
   hideSplash();
@@ -596,22 +603,20 @@ async function doGoogleAuth(){
   hideMsg('login-err');hideMsg('reg-err');
   try{
     const provider=new firebase.auth.GoogleAuthProvider();
-    await auth.signInWithPopup(provider);
+    await auth.signInWithRedirect(provider);
   }catch(e){
-    if(e.code!=='auth/popup-closed-by-user')showMsg('login-err','Google sign-in failed: '+e.message);
+    showMsg('login-err','Google sign-in failed: '+e.message);
   }
 }
 
-// Google login from forgot password — uses same email
 async function doGoogleAuthForgot(){
   hideMsg('forgot-err');
   try{
     const provider=new firebase.auth.GoogleAuthProvider();
     if(_forgotEmail)provider.setCustomParameters({login_hint:_forgotEmail});
-    await auth.signInWithPopup(provider);
-    // onAuthStateChanged will redirect
+    await auth.signInWithRedirect(provider);
   }catch(e){
-    if(e.code!=='auth/popup-closed-by-user')showMsg('forgot-err','Google sign-in failed: '+e.message);
+    showMsg('forgot-err','Google sign-in failed: '+e.message);
   }
 }
 
