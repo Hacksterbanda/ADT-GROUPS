@@ -1,16 +1,20 @@
 {
   "rewrites": [
     { "source": "/dashboard", "destination": "/dashboard.html" },
-    { "source": "/products",  "destination": "/products.html"  },
-    { "source": "/support",   "destination": "/support.html"   }
+    { "source": "/products", "destination": "/products.html" },
+    { "source": "/support", "destination": "/support.html" },
+    {
+      "source": "/__/auth/:path*",
+      "destination": "https://newforadt.firebaseapp.com/__/auth/:path*"
+    }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
         { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options",        "value": "DENY"    },
-        { "key": "Referrer-Policy",        "value": "strict-origin-when-cross-origin" }
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
       ]
     }
   ]
