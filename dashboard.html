@@ -283,28 +283,14 @@
 
       <!-- Balance card -->
       <div class="with-balance anim-1">
-        <div class="with-balance-label">💰 Profit Available to Withdraw</div>
+        <div class="with-balance-label">💰 Available to Withdraw</div>
         <div class="with-balance-val" id="with-returnable">₹0</div>
         <div style="font-size:11px;color:var(--text3);margin-top:5px;font-family:var(--font-mono);" id="with-min-note">Minimum withdrawal: loading...</div>
       </div>
       <div id="with-bal-display" style="display:none;">₹0</div>
 
-      <!-- Info row -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;" class="anim-2">
-        <div style="background:var(--green-dim);border:1px solid rgba(29,185,84,0.2);border-radius:14px;padding:14px;text-align:center;">
-          <div style="font-size:20px;margin-bottom:4px;">⚡</div>
-          <div style="font-size:12px;font-weight:700;color:var(--green2);">Fast Processing</div>
-          <div style="font-size:11px;color:var(--text3);margin-top:2px;">24-48 hours</div>
-        </div>
-        <div style="background:var(--blue-dim);border:1px solid rgba(59,130,246,0.2);border-radius:14px;padding:14px;text-align:center;">
-          <div style="font-size:20px;margin-bottom:4px;">🔒</div>
-          <div style="font-size:12px;font-weight:700;color:var(--blue2);">100% Secure</div>
-          <div style="font-size:11px;color:var(--text3);margin-top:2px;">Bank-grade safety</div>
-        </div>
-      </div>
-
       <!-- Daily limit bar -->
-      <div class="with-limit-bar anim-3">
+      <div class="with-limit-bar anim-2">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
           <span style="font-size:12px;color:var(--text2);font-weight:600;">Daily Withdrawals</span>
           <span id="with-count-badge" style="font-family:var(--font-mono);font-size:13px;font-weight:700;color:var(--gold2);">0 / 3</span>
@@ -313,18 +299,70 @@
         <div id="with-limit-note" style="font-size:11px;color:var(--text3);margin-top:6px;">3 withdrawals allowed per day. Resets at midnight.</div>
       </div>
 
-      <!-- Form -->
+      <!-- Saved Accounts -->
+      <div class="with-form-card anim-3" id="saved-accounts-section">
+        <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;">🏦 Saved Payout Accounts</div>
+
+        <!-- UPI Account -->
+        <div id="upi-account-wrap">
+          <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;">UPI Account</div>
+          <div id="upi-saved-display" style="display:none;background:var(--dark);border:1px solid rgba(29,185,84,0.2);border-radius:12px;padding:14px;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div style="font-size:10px;color:var(--text3);margin-bottom:3px;">UPI ID</div>
+                <div style="font-family:var(--font-mono);font-size:14px;color:var(--green2);font-weight:700;" id="upi-saved-val">—</div>
+              </div>
+              <span style="font-size:18px;">✅</span>
+            </div>
+          </div>
+          <div id="upi-add-wrap">
+            <input class="form-input" id="with-upi" type="text" placeholder="yourname@upi" style="margin-bottom:8px;">
+            <button class="btn btn-ghost btn-full" style="font-size:13px;" onclick="saveUPIAccount()">Save UPI Account →</button>
+          </div>
+        </div>
+
+        <div style="height:1px;background:var(--border);margin:16px 0;"></div>
+
+        <!-- Bank Account -->
+        <div id="bank-account-wrap">
+          <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;">Bank Account</div>
+          <div id="bank-saved-display" style="display:none;background:var(--dark);border:1px solid rgba(59,130,246,0.2);border-radius:12px;padding:14px;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div style="font-size:10px;color:var(--text3);margin-bottom:3px;">Account No.</div>
+                <div style="font-family:var(--font-mono);font-size:14px;color:var(--blue2);font-weight:700;" id="bank-saved-val">—</div>
+                <div style="font-size:11px;color:var(--text3);margin-top:2px;" id="bank-saved-ifsc">—</div>
+              </div>
+              <span style="font-size:18px;">✅</span>
+            </div>
+          </div>
+          <div id="bank-add-wrap">
+            <input class="form-input" id="with-bank" type="text" placeholder="Account Number" style="margin-bottom:8px;">
+            <input class="form-input" id="with-ifsc" type="text" placeholder="IFSC Code (e.g. SBIN0001234)" style="margin-bottom:8px;">
+            <button class="btn btn-ghost btn-full" style="font-size:13px;" onclick="saveBankAccount()">Save Bank Account →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Withdraw Form -->
       <div class="with-form-card anim-4">
-        <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:18px;">📋 Withdrawal Details</div>
+        <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:18px;">📋 Withdraw Amount</div>
         <div class="msg-error" id="with-err"></div>
         <div class="msg-success" id="with-ok"></div>
         <div class="form-group">
-          <label class="form-label">Enter Amount (₹)</label>
-          <input class="form-input" id="with-amount" type="number" placeholder="Enter amount to withdraw">
-          <div class="form-hint" id="with-amount-hint">Loading minimum withdrawal limit...</div>
+          <label class="form-label">Amount (₹)</label>
+          <input class="form-input" id="with-amount" type="number" placeholder="Enter amount">
+          <div class="form-hint" id="with-amount-hint">Loading...</div>
         </div>
-        <div class="form-group"><label class="form-label">UPI ID or Bank Account Number</label><input class="form-input" id="with-account" placeholder="yourname@upi or account number"></div>
-        <div class="form-group"><label class="form-label">IFSC Code <span style="color:var(--text3);font-weight:400;">(bank transfers only)</span></label><input class="form-input" id="with-ifsc" placeholder="SBIN0001234 (leave blank for UPI)"></div>
+        <!-- Payout method selector -->
+        <div class="form-group">
+          <label class="form-label">Payout To</label>
+          <select class="form-input" id="with-method">
+            <option value="">— Select saved account —</option>
+            <option value="upi" id="with-opt-upi" disabled>UPI (not set)</option>
+            <option value="bank" id="with-opt-bank" disabled>Bank Account (not set)</option>
+          </select>
+        </div>
         <button id="with-submit-btn" class="btn btn-gold btn-full btn-lg" onclick="submitWithdraw()">Withdraw Now →</button>
       </div>
     </section>
@@ -860,7 +898,62 @@ function validateCustomInput(inp){
   hint.style.color='var(--green2)';hint.textContent='Valid amount';selectedAmount=n;
 }
 
-// WITHDRAW
+// ── SAVED ACCOUNTS ──────────────────────────────────────────
+function loadSavedAccounts(){
+  if(!userData)return;
+  const upiVal=userData.savedUPI||'';
+  const bankVal=userData.savedBank||'';
+  const ifscVal=userData.savedIFSC||'';
+
+  // UPI
+  if(upiVal){
+    document.getElementById('upi-saved-val').textContent=upiVal;
+    document.getElementById('upi-saved-display').style.display='block';
+    document.getElementById('upi-add-wrap').style.display='none';
+    const opt=document.getElementById('with-opt-upi');
+    opt.textContent='UPI — '+upiVal;
+    opt.disabled=false;
+  }
+
+  // Bank
+  if(bankVal){
+    document.getElementById('bank-saved-val').textContent=bankVal;
+    document.getElementById('bank-saved-ifsc').textContent='IFSC: '+ifscVal;
+    document.getElementById('bank-saved-display').style.display='block';
+    document.getElementById('bank-add-wrap').style.display='none';
+    const opt=document.getElementById('with-opt-bank');
+    opt.textContent='Bank — '+bankVal;
+    opt.disabled=false;
+  }
+}
+
+async function saveUPIAccount(){
+  const upi=document.getElementById('with-upi').value.trim();
+  if(!upi||!upi.includes('@')){showMsg('with-err','Please enter a valid UPI ID (e.g. name@upi)');return;}
+  if(userData.savedUPI){showMsg('with-err','UPI account already saved. Contact support to change.');return;}
+  try{
+    await db.collection('users').doc(currentUser.uid).update({savedUPI:upi});
+    userData.savedUPI=upi;
+    showMsg('with-ok','✅ UPI account saved successfully!','success');
+    loadSavedAccounts();
+  }catch(e){showMsg('with-err','Error: '+e.message);}
+}
+
+async function saveBankAccount(){
+  const bank=document.getElementById('with-bank').value.trim();
+  const ifsc=document.getElementById('with-ifsc').value.trim();
+  if(!bank||bank.length<9){showMsg('with-err','Please enter a valid account number.');return;}
+  if(!ifsc||ifsc.length<11){showMsg('with-err','Please enter a valid IFSC code.');return;}
+  if(userData.savedBank){showMsg('with-err','Bank account already saved. Contact support to change.');return;}
+  try{
+    await db.collection('users').doc(currentUser.uid).update({savedBank:bank,savedIFSC:ifsc});
+    userData.savedBank=bank;userData.savedIFSC=ifsc;
+    showMsg('with-ok','✅ Bank account saved successfully!','success');
+    loadSavedAccounts();
+  }catch(e){showMsg('with-err','Error: '+e.message);}
+}
+
+// ── WITHDRAW ────────────────────────────────────────────────
 async function loadTodayWithdrawCount(){
   try{
     const today=new Date();today.setHours(0,0,0,0);
@@ -883,43 +976,51 @@ async function submitWithdraw(){
   const minWith=siteSettings.minWithdraw||100;
   const maxWith=siteSettings.maxWithdraw||0;
   const amount=parseInt(document.getElementById('with-amount').value);
-  const account=document.getElementById('with-account').value.trim();
-  const ifsc=document.getElementById('with-ifsc').value.trim();
+  const method=document.getElementById('with-method').value;
   const withdrawable=userData?.returns||0;
+
+  hideMsg('with-err');hideMsg('with-ok');
+
   if(!amount||amount<minWith){showMsg('with-err',`Minimum withdrawal is ${formatINR(minWith)}.`);return;}
   if(maxWith&&amount>maxWith){showMsg('with-err',`Maximum withdrawal is ${formatINR(maxWith)}.`);return;}
-  if(!account){showMsg('with-err','Please enter your UPI ID or bank account number.');return;}
-  if(withdrawable<=0){showMsg('with-err','No profit earnings to withdraw yet. Invest and claim daily returns first!');return;}
-  if(amount>withdrawable){showMsg('with-err',`Only profit earnings can be withdrawn. Available: ${formatINR(withdrawable)}`);return;}
+  if(!method){showMsg('with-err','Please select a payout account.');return;}
+  if(withdrawable<amount){showMsg('with-err',`Available: ${formatINR(withdrawable)}. Insufficient balance.`);return;}
+
+  // Get saved account details
+  let account='',ifsc='';
+  if(method==='upi'){
+    if(!userData.savedUPI){showMsg('with-err','Please save your UPI account first.');return;}
+    account=userData.savedUPI;
+  } else {
+    if(!userData.savedBank){showMsg('with-err','Please save your bank account first.');return;}
+    account=userData.savedBank;ifsc=userData.savedIFSC||'';
+  }
+
   // 3/day limit
   const cnt=await loadTodayWithdrawCount();
   if(cnt>=3){showMsg('with-err','Daily limit reached (3/day). Try again tomorrow!');return;}
+
   const btn=document.getElementById('with-submit-btn');
   btn.disabled=true;btn.textContent='Processing...';
   try{
     const txnId=generateTxnId();
     const batch=db.batch();
-    // Save withdrawal
     batch.set(db.collection('transactions').doc(txnId),{
-      txnId,userId:currentUser.uid,userName:userData?userData.name:'',
-      userEmail:currentUser.email,type:'Withdraw',amount,account,ifsc:ifsc||'',
+      txnId,userId:currentUser.uid,userName:userData?.name||'',
+      userEmail:currentUser.email,type:'Withdraw',amount,
+      account,ifsc,method,
       status:'pending',createdAt:firebase.firestore.FieldValue.serverTimestamp()
     });
-    // ✅ Deduct returns immediately
+    // Deduct immediately
     batch.update(db.collection('users').doc(currentUser.uid),{
       returns:firebase.firestore.FieldValue.increment(-amount),
       balance:firebase.firestore.FieldValue.increment(-amount)
     });
     await batch.commit();
-    if(userData){
-      userData.returns=(userData.returns||0)-amount;
-      userData.balance=(userData.balance||0)-amount;
-      renderUserData();
-    }
+    if(userData){userData.returns=(userData.returns||0)-amount;userData.balance=(userData.balance||0)-amount;renderUserData();}
     showMsg('with-ok','✅ Withdrawal submitted! Admin will process within 24-48 hours.','success');
     document.getElementById('with-amount').value='';
-    document.getElementById('with-account').value='';
-    document.getElementById('with-ifsc').value='';
+    document.getElementById('with-method').value='';
     await loadTodayWithdrawCount();
   }catch(e){showMsg('with-err','Error: '+e.message);}
   finally{const b=document.getElementById('with-submit-btn');if(b){b.disabled=false;b.textContent='Withdraw Now →';}}
@@ -1104,6 +1205,7 @@ function showTab(tab,navEl){
     const noteEl=document.getElementById('with-min-note');if(noteEl)noteEl.textContent=`Minimum withdrawal: ${formatINR(minWith)}`;
     const hintEl=document.getElementById('with-amount-hint');if(hintEl)hintEl.textContent=`Min: ${formatINR(minWith)} · Available: ${formatINR(userData.returns||0)}`;
     const inp=document.getElementById('with-amount');if(inp)inp.placeholder=`Enter amount (min ${formatINR(minWith)})`;
+    loadSavedAccounts();
     loadTodayWithdrawCount();
   }
   closeSidebar();
