@@ -492,14 +492,18 @@ const refCode=urlParams.get('ref')||'';
 auth.onAuthStateChanged(async user=>{
   hideSplash();
   if(!user)return;
+  // Show loading overlay
+  const overlay=document.getElementById('auth-overlay');
+  const panel=document.querySelector('.auth-panel');
+  if(panel)panel.innerHTML='<div style="text-align:center;padding:60px 20px;"><div class="spinner" style="margin:0 auto 16px;"></div><div style="color:var(--text2);font-size:14px;">Signing you in...</div></div>';
+  if(overlay)overlay.classList.add('open');
   try{
     const doc=await db.collection('users').doc(user.uid).get();
     if(doc.exists){
-      // Existing user — just redirect
       redirectUser(user,doc.data());
       return;
     }
-    // No doc — only create if Google user (email users create their own doc in doRegister)
+    // New Google user
     const isGoogle=user.providerData.some(p=>p.providerId==='google.com');
     if(isGoogle){
       const myRefCode=generateRefCode(user.uid);
@@ -514,16 +518,20 @@ auth.onAuthStateChanged(async user=>{
         referredBy:refCode||'',
         createdAt:firebase.firestore.FieldValue.serverTimestamp()
       });
-      window.location.replace('/dashboard');
+      window.location.href='/dashboard';
     }
-    // Email user — doRegister() will handle doc creation, then redirect happens
-  }catch(e){console.error(e);}
+  }catch(e){
+    console.error(e);
+    // Reset panel on error
+    if(overlay)overlay.classList.remove('open');
+  }
 });
 
 function redirectUser(user,data){
   const dest=data&&data.role==='admin'?'/admin.html':'/dashboard';
-  window.location.replace(dest);
+  window.location.href=dest;
 }
+
 
 // ── LOAD DATA ───────────────────────────────────────────────
 async function loadData(){
@@ -576,7 +584,7 @@ async function doRegister(){
       });
     }
     showMsg('reg-ok',t('account_created'),'success');
-    setTimeout(()=>window.location.replace('/dashboard'),1500);
+    setTimeout(()=>window.location.href='/dashboard',1500);
   }catch(e){
     showMsg('reg-err',e.code==='auth/email-already-in-use'?t('email_exists'):e.message);
     btn.disabled=false;btn.textContent='Create Account →';
