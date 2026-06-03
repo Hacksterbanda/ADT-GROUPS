@@ -1,12 +1,27 @@
 {
   "hosting": {
     "public": ".",
-    "ignore": ["firebase.json", "**/.*"],
+    "ignore": [
+      "firebase.json",
+      "**/.*"
+    ],
     "rewrites": [
-      { "source": "/dashboard", "destination": "/dashboard.html" },
-      { "source": "/products", "destination": "/products.html" },
-      { "source": "/support", "destination": "/support.html" },
-      { "source": "/admin", "destination": "/admin.html" }
+      {
+        "source": "/dashboard",
+        "destination": "/dashboard.html"
+      },
+      {
+        "source": "/products",
+        "destination": "/products.html"
+      },
+      {
+        "source": "/support",
+        "destination": "/support.html"
+      },
+      {
+        "source": "/admin",
+        "destination": "/admin.html"
+      }
     ]
   }
 }
