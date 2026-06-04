@@ -11,6 +11,9 @@ const firebaseConfig = {
 };
 if (!firebase.apps || !firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 
+// App Check Debug Token
+self.FIREBASE_APPCHECK_DEBUG_TOKEN = "B89C6000-5799-431F-82AC-A7DE154E9A91";
+
 // ── APP CHECK (Bot & Abuse Protection) ────────────────────
 const appCheck = firebase.appCheck();
 appCheck.activate(
