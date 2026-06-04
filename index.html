@@ -388,7 +388,7 @@ auth.onAuthStateChanged(async user=>{
 });
 
 function redirectUser(user,data){
-  window.location.href=data&&data.role==='admin'?'/admin.html':'/dashboard';
+  window.location.href=data&&data.role==='admin'?'/admin':'/dashboard';
 }
 
 // ── LOAD DATA ───────────────────────────────────────────────
