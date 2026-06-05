@@ -17,7 +17,7 @@ self.FIREBASE_APPCHECK_DEBUG_TOKEN = "B89C6000-5799-431F-82AC-A7DE154E9A91";
 // ── APP CHECK (Bot & Abuse Protection) ────────────────────
 const appCheck = firebase.appCheck();
 appCheck.activate(
-  new firebase.appCheck.ReCaptchaV3Provider('6LcDdAktAAAAAO7RhrEVB5tOO1qtC8IzUNE1eABH'),
+  new firebase.appCheck.ReCaptchaV3Provider('6Ldy6w4tAAAAAAREs2kapFTw4Rvac3yWRG3P8h7d'),
   true  // auto token refresh
 );
 
