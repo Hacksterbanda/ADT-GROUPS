@@ -12,11 +12,25 @@ const firebaseConfig = {
 if (!firebase.apps || !firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 
 // ── APP CHECK (Bot & Abuse Protection) ────────────────────
-const appCheck = firebase.appCheck();
-appCheck.activate(
-  new firebase.appCheck.ReCaptchaV3Provider('6Ldy6w4tAAAAAAREs2kapFTw4Rvac3yWRG3P8h7d'),
-  true
-);
+try {
+  if (typeof firebase.appCheck === 'function') {
+    const appCheck = firebase.appCheck();
+    appCheck.activate(
+      new firebase.appCheck.ReCaptchaV3Provider('6Ldy6w4tAAAAAAREs2kapFTw4Rvac3yWRG3P8h7d'),
+      true
+    );
+  } else {
+    window.addEventListener('load', function() {
+      try {
+        const appCheck = firebase.appCheck();
+        appCheck.activate(
+          new firebase.appCheck.ReCaptchaV3Provider('6Ldy6w4tAAAAAAREs2kapFTw4Rvac3yWRG3P8h7d'),
+          true
+        );
+      } catch(e) { console.warn('AppCheck init failed:', e); }
+    });
+  }
+} catch(e) { console.warn('AppCheck init error:', e); }
 
 const auth = firebase.auth();
 const db   = firebase.firestore();
