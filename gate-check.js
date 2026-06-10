@@ -1,5 +1,5 @@
 // ── ADT Gate Check ─────────────────────────────────────
-const ADT_VERIFY_URL = 'https://YOUR-VERCEL-URL.vercel.app';
+const ADT_VERIFY_URL = 'https://advanced-multi-layer-enterprise-fir.vercel.app/';
 const ADT_TOKEN_KEY  = 'adt_sec_v1';
 const ADT_DAYS       = 7;
 (function(){
