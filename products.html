@@ -1,7 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script src="/gate-check.js"></script>
+<script>
+/* ADT Gate Check */
+(function(){
+  var V='https://advanced-multi-layer-enterprise-fir.vercel.app';
+  var K='adt_sec_v1';
+  var p=new URLSearchParams(window.location.search);
+  var tk=p.get('adt_v');
+  if(tk){
+    localStorage.setItem(K,JSON.stringify({v:tk,exp:Date.now()+7*86400000}));
+    window.history.replaceState({},'',window.location.pathname);
+  }
+  try{
+    var t=JSON.parse(localStorage.getItem(K));
+    if(t&&Date.now()<t.exp)return;
+    localStorage.removeItem(K);
+  }catch(e){}
+  window.location.replace(V+'?from='+encodeURIComponent(window.location.href));
+})();
+</script>
+<script>
+// ADT Gate Check
+(function(){
+  var VERIFY = 'https://advanced-multi-layer-enterprise-fir.vercel.app';
+  var KEY = 'adt_sec_v1';
+  var DAYS = 7;
+  var params = new URLSearchParams(window.location.search);
+  var tk = params.get('adt_v');
+  if(tk){
+    localStorage.setItem(KEY, JSON.stringify({v:tk, exp:Date.now()+DAYS*86400000}));
+    window.history.replaceState({},'',window.location.pathname);
+  }
+  try{
+    var t = JSON.parse(localStorage.getItem(KEY));
+    if(t && Date.now() < t.exp) return;
+    localStorage.removeItem(KEY);
+  }catch(e){}
+  window.location.replace(VERIFY + '?from=' + encodeURIComponent(window.location.href));
+})();
+</script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Products — ADT GROUPS</title>
