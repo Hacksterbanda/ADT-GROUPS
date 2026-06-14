@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "adtgroupsltd",
     "public": ".",
     "ignore": [
       "firebase.json",
