@@ -1,599 +1,746 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script>
-/* ADT Gate Check */
-(function(){
-  var V='https://advanced-multi-layer-enterprise-fir.vercel.app';
-  var K='adt_sec_v1';
-  var p=new URLSearchParams(window.location.search);
-  var tk=p.get('adt_v');
-  if(tk){
-    localStorage.setItem(K,JSON.stringify({v:tk,exp:Date.now()+7*86400000}));
-    window.history.replaceState({},'',window.location.pathname);
-  }
-  try{
-    var t=JSON.parse(localStorage.getItem(K));
-    if(t&&Date.now()<t.exp)return;
-    localStorage.removeItem(K);
-  }catch(e){}
-  window.location.replace(V+'?from='+encodeURIComponent(window.location.href));
-})();
-</script>
-<script>
-// ADT Gate Check
-(function(){
-  var VERIFY = 'https://advanced-multi-layer-enterprise-fir.vercel.app';
-  var KEY = 'adt_sec_v1';
-  var DAYS = 7;
-  var params = new URLSearchParams(window.location.search);
-  var tk = params.get('adt_v');
-  if(tk){
-    localStorage.setItem(KEY, JSON.stringify({v:tk, exp:Date.now()+DAYS*86400000}));
-    window.history.replaceState({},'',window.location.pathname);
-  }
-  try{
-    var t = JSON.parse(localStorage.getItem(KEY));
-    if(t && Date.now() < t.exp) return;
-    localStorage.removeItem(KEY);
-  }catch(e){}
-  window.location.replace(VERIFY + '?from=' + encodeURIComponent(window.location.href));
-})();
-</script>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>ADT GROUPS — Smart Investments. Stronger Futures.</title>
-<link rel="stylesheet" href="style.css"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Checking your connection... | ADT Groups Security</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:0 48px;height:66px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);backdrop-filter:blur(24px) saturate(180%);background:rgba(5,5,10,0.82);transition:all 0.3s;}
-nav.scrolled{box-shadow:0 8px 40px rgba(0,0,0,0.55);}
-.nav-links{display:flex;gap:24px;}
-.nav-links a{font-size:14px;font-weight:500;color:var(--text2);text-decoration:none;transition:color 0.2s;position:relative;padding-bottom:3px;}
-.nav-links a::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1.5px;background:var(--gold);transform:scaleX(0);transition:transform 0.25s;transform-origin:left;}
-.nav-links a:hover{color:var(--gold2);}
-.nav-links a:hover::after{transform:scaleX(1);}
-.nav-right{display:flex;align-items:center;gap:10px;}
-.mobile-menu-btn{display:none;background:none;border:1px solid var(--border);color:var(--text);padding:7px 11px;border-radius:8px;cursor:pointer;font-size:16px;}
-.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;padding-top:66px;}
-.hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 80% 60% at 65% 40%,rgba(5,5,10,0.2) 0%,var(--black) 70%),radial-gradient(ellipse 40% 50% at 20% 60%,rgba(29,185,84,0.05) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 80% 20%,rgba(201,168,76,0.07) 0%,transparent 50%);}
-.hero-bg-img{position:absolute;inset:0;z-index:-1;background-image:url('https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1800&q=80');background-size:cover;background-position:center;opacity:0.08;filter:blur(2px);}
-.hero-grid{position:absolute;inset:0;z-index:0;opacity:0.022;background-image:linear-gradient(var(--gold) 1px,transparent 1px),linear-gradient(90deg,var(--gold) 1px,transparent 1px);background-size:80px 80px;}
-.hero-inner{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:80px 48px;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border-radius:100px;border:1px solid rgba(201,168,76,0.28);background:rgba(201,168,76,0.05);font-size:10px;font-family:var(--font-mono);letter-spacing:2px;color:var(--gold2);text-transform:uppercase;margin-bottom:24px;}
-.hero-badge .dot{width:5px;height:5px;background:var(--green);border-radius:50%;animation:pdot 2s infinite;}
-.hero-h1{font-family:var(--font-display);font-size:clamp(44px,5.5vw,74px);font-weight:800;line-height:1.04;letter-spacing:-1.5px;margin-bottom:18px;}
-.hero-h1 .white{color:#fff;display:block;}
-.hero-h1 .gold{display:block;background:linear-gradient(120deg,var(--gold2),var(--gold3),var(--gold2));background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 4s ease infinite;}
-@keyframes shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-.hero-sub{font-size:15px;color:var(--text2);line-height:1.75;max-width:440px;margin-bottom:32px;}
-.hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:36px;}
-.hero-trust{display:flex;gap:20px;padding-top:24px;border-top:1px solid var(--border);flex-wrap:wrap;}
-.trust-item{display:flex;align-items:center;gap:9px;}
-.trust-icon{width:32px;height:32px;border-radius:9px;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
-.trust-val{font-size:12px;font-weight:600;color:var(--text);}
-.trust-lbl{font-size:10px;color:var(--text3);}
-.hero-right{position:relative;}
-.hero-card{background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%);border:1px solid var(--border2);border-radius:22px;padding:26px;box-shadow:0 32px 80px rgba(0,0,0,0.65),0 0 0 1px rgba(255,255,255,0.04);animation:float-c 6s ease-in-out infinite;}
-@keyframes float-c{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.card-hdr{display:flex;align-items:center;gap:9px;margin-bottom:18px;}
-.card-logo{width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:12px;color:#000;}
-.card-logo-txt{font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--gold2);}
-.card-pval{font-family:var(--font-display);font-size:36px;font-weight:800;color:#fff;letter-spacing:-1px;margin-bottom:3px;}
-.card-pchg{font-size:12px;color:var(--green2);margin-bottom:18px;}
-.mini-chart{height:48px;background:linear-gradient(180deg,rgba(29,185,84,0.08) 0%,transparent 100%);border-radius:8px;margin-bottom:16px;position:relative;overflow:hidden;}
-.mini-chart::after{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='100%25' height='48' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='0,40 40,30 80,35 120,16 160,20 200,8 240,14 280,3 320,9' fill='none' stroke='%231db954' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");background-size:100% 100%;}
-.card-stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
-.cs-item{background:var(--dark);border:1px solid var(--border);border-radius:9px;padding:11px;}
-.cs-lbl{font-size:10px;color:var(--text3);margin-bottom:3px;}
-.cs-val{font-size:15px;font-weight:700;font-family:var(--font-display);}
-.hero-mini-card{position:absolute;bottom:-12px;left:-20px;background:var(--card);border:1px solid var(--border2);border-radius:13px;padding:14px 18px;box-shadow:var(--shadow);animation:float-c 6s ease-in-out infinite 2.5s;}
-.mini-invest{display:flex;align-items:center;gap:10px;}
-.mini-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--green),#16a34a);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:13px;flex-shrink:0;}
-.stats-bar{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:linear-gradient(135deg,rgba(11,11,18,0.95),rgba(17,17,24,0.95));}
-.stats-bar-inner{max-width:1200px;margin:0 auto;padding:0 48px;display:grid;grid-template-columns:repeat(4,1fr);}
-.sbi{padding:26px 18px;text-align:center;border-right:1px solid var(--border);transition:background 0.3s;}
-.sbi:last-child{border-right:none;}
-.sbi:hover{background:rgba(255,255,255,0.015);}
-.sbi-icon{font-size:24px;margin-bottom:8px;}
-.sbi-num{font-family:var(--font-display);font-size:30px;font-weight:800;color:var(--gold2);letter-spacing:-0.5px;}
-.sbi-label{font-size:11px;color:var(--text3);margin-top:2px;}
-.sbi-change{font-size:10px;color:var(--green2);margin-top:2px;font-family:var(--font-mono);}
-.section{max-width:1200px;margin:0 auto;padding:80px 48px;}
-.sec-eyebrow{font-size:10px;font-family:var(--font-mono);letter-spacing:3px;color:var(--gold2);text-transform:uppercase;margin-bottom:10px;}
-.sec-title{font-family:var(--font-display);font-size:clamp(30px,4vw,46px);font-weight:800;letter-spacing:-0.5px;line-height:1.1;margin-bottom:12px;}
-.sec-sub{font-size:15px;color:var(--text2);max-width:460px;line-height:1.65;margin-bottom:48px;}
-.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-.cat-card{border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:all 0.4s cubic-bezier(0.4,0,0.2,1);}
-.cat-card:hover{transform:translateY(-7px);}
-.cat-img-wrap{height:190px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
-.cat-img-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform 0.55s;}
-.cat-card:hover .cat-img-bg{transform:scale(1.07);}
-.cat-img-overlay{position:absolute;inset:0;}
-.cat-img-icon{position:relative;z-index:2;font-size:44px;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.5));}
-.cat-body{padding:22px;background:var(--card);}
-.cat-accent{font-size:10px;font-family:var(--font-mono);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
-.cat-name{font-family:var(--font-display);font-size:21px;font-weight:700;margin-bottom:7px;}
-.cat-desc{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:14px;}
-.cat-feats{display:flex;flex-direction:column;gap:5px;margin-bottom:16px;}
-.cat-feat{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text2);}
-.cat-feat-dot{width:4px;height:4px;border-radius:50%;flex-shrink:0;}
-.cat-btn{width:100%;padding:12px;border-radius:10px;font-size:13px;font-weight:700;font-family:var(--font-body);cursor:pointer;border:none;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:6px;}
-.cat-farming{border-color:rgba(29,185,84,0.15);}
-.cat-farming:hover{border-color:rgba(29,185,84,0.35);box-shadow:0 18px 52px rgba(29,185,84,0.09);}
-.cat-realestate{border-color:rgba(201,168,76,0.15);}
-.cat-realestate:hover{border-color:rgba(201,168,76,0.35);box-shadow:0 18px 52px rgba(201,168,76,0.09);}
-.cat-business{border-color:rgba(59,130,246,0.15);}
-.cat-business:hover{border-color:rgba(59,130,246,0.35);box-shadow:0 18px 52px rgba(59,130,246,0.09);}
-.why-section{border-top:1px solid var(--border);background:linear-gradient(180deg,var(--dark) 0%,var(--black) 100%);}
-.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px;}
-.why-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:26px;transition:all 0.3s;}
-.why-card:hover{border-color:var(--gold-dim);transform:translateY(-4px);box-shadow:0 14px 40px rgba(0,0,0,0.4);}
-.why-icon{font-size:26px;margin-bottom:16px;}
-.why-title{font-family:var(--font-display);font-size:19px;font-weight:700;margin-bottom:9px;}
-.why-text{font-size:13px;color:var(--text2);line-height:1.7;}
-.site-footer{border-top:1px solid var(--border);padding:36px 48px;max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;}
-.footer-copy{font-size:12px;color:var(--text3);}
-.footer-links{display:flex;gap:20px;}
-.footer-links a{font-size:12px;color:var(--text3);text-decoration:none;transition:color 0.2s;}
-.footer-links a:hover{color:var(--gold2);}
-.auth-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.92);backdrop-filter:blur(18px);display:none;align-items:center;justify-content:center;padding:20px;}
-.auth-overlay.open{display:flex;}
-.auth-panel{background:var(--card);border:1px solid var(--border2);border-radius:var(--r-xl);padding:40px;width:100%;max-width:440px;position:relative;box-shadow:0 32px 80px rgba(0,0,0,0.8),0 0 0 1px rgba(201,168,76,0.06);animation:modal-in 0.32s cubic-bezier(0.34,1.56,0.64,1);max-height:92vh;overflow-y:auto;}
-.auth-close{position:absolute;top:16px;right:16px;width:34px;height:34px;border-radius:50%;background:var(--card2);border:1px solid var(--border);color:var(--text2);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
-.auth-close:hover{color:var(--red2);background:var(--red-dim);border-color:rgba(239,68,68,0.3);}
-.auth-logo-wrap{text-align:center;margin-bottom:24px;}
-.auth-logo-mark{width:52px;height:52px;border-radius:13px;background:linear-gradient(135deg,var(--card2),var(--dark));border:1px solid var(--gold);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 0 30px rgba(201,168,76,0.15);}
-.auth-logo-mark::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--gold-dim),transparent);}
-.auth-logo-inner{position:relative;z-index:1;font-family:var(--font-display);font-size:22px;font-weight:800;color:var(--gold2);}
-.auth-title{font-family:var(--font-display);font-size:24px;font-weight:800;margin-bottom:4px;}
-.auth-sub{font-size:13px;color:var(--text2);}
-.auth-tabs{display:flex;background:var(--dark);border-radius:10px;padding:3px;margin-bottom:22px;}
-.auth-tab{flex:1;padding:9px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-body);border:none;background:transparent;color:var(--text3);transition:all 0.2s;}
-.auth-tab.active{background:var(--card2);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,0.3);}
-.auth-form{display:none;}
-.auth-form.active{display:block;}
-.recovery-box{background:linear-gradient(135deg,rgba(201,168,76,0.06),rgba(201,168,76,0.02));border:1px solid rgba(201,168,76,0.2);border-radius:11px;padding:13px;margin-bottom:14px;}
-.recovery-icon{font-size:17px;margin-bottom:4px;}
-.recovery-title{font-size:12px;font-weight:700;color:var(--gold2);margin-bottom:3px;}
-.recovery-text{font-size:11px;color:var(--text2);line-height:1.5;}
-.forgot-step{display:none;}
-.forgot-step.active{display:block;}
-.step-dots{display:flex;gap:6px;margin-bottom:18px;}
-.step-dot{flex:1;height:3px;border-radius:2px;background:var(--border);transition:background 0.3s;}
-.step-dot.done{background:var(--gold);}
-.auth-switch{text-align:center;margin-top:16px;font-size:13px;color:var(--text2);}
-.auth-switch a{color:var(--gold2);cursor:pointer;}
-.mobile-nav{display:none;position:fixed;top:66px;left:0;right:0;background:var(--dark);border-bottom:1px solid var(--border);z-index:199;padding:16px 24px;flex-direction:column;gap:4px;}
-.mobile-nav.open{display:flex;}
-.mobile-nav a{color:var(--text2);text-decoration:none;padding:10px 14px;border-radius:9px;font-size:14px;font-weight:500;transition:all 0.2s;}
-.mobile-nav a:hover{background:var(--gold-dim);color:var(--gold2);}
-.mobile-nav-btns{display:flex;gap:8px;margin-top:8px;}
-@media(max-width:1024px){
-  .hero-inner{grid-template-columns:1fr;gap:40px;}
-  .hero-right{display:none;}
-  nav{padding:0 24px;}
-  .nav-links{display:none;}
-  .mobile-menu-btn{display:block;}
-  .hero-inner{padding:50px 24px;}
-  .section{padding:60px 24px;}
-  .cat-grid{grid-template-columns:1fr;}
-  .why-grid{grid-template-columns:1fr;}
-  .stats-bar-inner{grid-template-columns:repeat(2,1fr);padding:0 24px;}
-  .sbi{border-right:none;border-bottom:1px solid var(--border);}
-  .sbi:nth-child(odd){border-right:1px solid var(--border);}
-  .sbi:last-child,.sbi:nth-last-child(2){border-bottom:none;}
-  .site-footer{padding:28px 24px;flex-direction:column;text-align:center;}
+:root{
+  --bg:#05050a;--card:#111119;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.13);
+  --gold:#c9a84c;--gold2:#e2b96a;--gold-dim:rgba(201,168,76,0.10);--gold-glow:rgba(201,168,76,0.22);
+  --green:#1db954;--green2:#28d963;--green-dim:rgba(29,185,84,0.10);--green-glow:rgba(29,185,84,0.28);
+  --red:#ef4444;--text:#eeeef6;--text2:#8888a2;--text3:#44445a;
+  --font:'Sora',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
 }
-@media(max-width:480px){.hero-h1{font-size:38px;}.auth-panel{padding:28px 18px;}}
-.btn-gold{box-shadow:0 4px 20px rgba(201,168,76,0.25);}
-.btn-gold:hover{box-shadow:0 6px 28px rgba(201,168,76,0.4);}
-.form-input:focus{box-shadow:0 0 0 3px rgba(201,168,76,0.12);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--font);
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:16px 12px;overflow-x:hidden;
+  user-select:none;-webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.bg-grid{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(201,168,76,0.015) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(201,168,76,0.015) 1px,transparent 1px);
+  background-size:55px 55px;
+}
+.orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(90px);}
+.orb1{width:400px;height:400px;background:rgba(201,168,76,0.07);top:-100px;right:-100px;}
+.orb2{width:300px;height:300px;background:rgba(59,130,246,0.05);bottom:-80px;left:-80px;}
+
+.wrap{
+  position:relative;z-index:10;
+  width:min(460px,100%);
+  display:flex;flex-direction:column;gap:10px;
+  animation:fadeUp 0.5s cubic-bezier(0.23,1,0.32,1);
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+/* Header */
+.adt-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:14px;padding:13px 18px;
+}
+.brand{display:flex;align-items:center;gap:11px;}
+.logo{
+  width:40px;height:40px;border-radius:10px;
+  background:linear-gradient(135deg,#1a1a2a,#222234);
+  border:1px solid rgba(201,168,76,0.45);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 16px var(--gold-glow);flex-shrink:0;
+}
+.brand-name{font-size:15px;font-weight:800;color:var(--gold2);}
+.brand-tag{font-size:8.5px;color:var(--text3);font-family:var(--mono);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+.ssl{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(29,185,84,0.08);border:1px solid rgba(29,185,84,0.2);
+  border-radius:100px;padding:4px 11px;
+  font-size:9px;font-weight:700;color:var(--green2);
+  font-family:var(--mono);letter-spacing:1px;
+}
+.ssl-dot{width:5px;height:5px;border-radius:50%;background:var(--green2);box-shadow:0 0 5px var(--green-glow);}
+
+/* Warning */
+.warn-box{
+  background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.16);
+  border-radius:12px;padding:13px 16px;display:flex;gap:11px;align-items:flex-start;
+}
+.warn-ico{font-size:18px;flex-shrink:0;margin-top:1px;}
+.warn-title{font-size:10px;font-weight:700;color:#f87171;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.warn-body{font-size:12px;color:var(--text2);line-height:1.65;}
+.warn-body b{color:var(--text);font-weight:600;}
+
+/* Main card */
+.main-card{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:16px;overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
+}
+.card-hdr{
+  padding:12px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.chdr-l{display:flex;align-items:center;gap:8px;}
+.hdr-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 7px var(--gold-glow);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+.hdr-t{font-size:10px;font-weight:700;color:var(--text2);letter-spacing:2px;text-transform:uppercase;}
+.hdr-url{font-size:10px;color:var(--text3);font-family:var(--mono);}
+.card-body{padding:20px 18px;}
+
+/* Steps */
+.steps{display:flex;align-items:center;margin-bottom:20px;}
+.si{display:flex;align-items:center;gap:6px;flex:1;}
+.sn{
+  width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;color:var(--text3);flex-shrink:0;transition:all 0.3s;
+}
+.sn.act{border-color:var(--gold);color:var(--gold2);background:var(--gold-dim);box-shadow:0 0 9px var(--gold-glow);}
+.sn.done{background:var(--green);border-color:var(--green);color:#000;font-size:11px;}
+.sl{font-size:10px;color:var(--text3);font-family:var(--mono);transition:color 0.3s;}
+.sl.act{color:var(--gold2);}
+.sl.done{color:var(--green2);}
+.s-line{flex:1;height:1px;background:var(--border);margin:0 7px;}
+
+/* reCAPTCHA */
+.rc-box{
+  background:#f9f9f9;border:1px solid #d3d3d3;border-radius:3px;
+  font-family:Arial,Helvetica,sans-serif;
+  box-shadow:0 1px 3px rgba(0,0,0,0.12);overflow:hidden;
+}
+.rc-inner{display:flex;align-items:center;padding:13px 12px 13px 15px;gap:13px;background:#f9f9f9;}
+.rc-cb{
+  width:28px;height:28px;border:2px solid #c1c1c1;border-radius:2px;
+  background:#fff;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;transition:all 0.18s;
+}
+.rc-cb:hover{border-color:#999;}
+.rc-cb.chk{border-color:#4a8ef0;}
+.rc-cb.ok{background:#4a8ef0;border-color:#4a8ef0;}
+.rc-spin{width:17px;height:17px;border:2.5px solid #ddd;border-top-color:#4a8ef0;border-radius:50%;animation:sp 0.65s linear infinite;display:none;}
+@keyframes sp{to{transform:rotate(360deg)}}
+.rc-tick{color:#fff;font-size:15px;font-weight:bold;display:none;}
+.rc-txt{flex:1;}
+.rc-lbl{font-size:14px;color:#333;}
+.rc-sub{font-size:11px;color:#aaa;margin-top:2px;display:none;}
+.rc-rgt{display:flex;flex-direction:column;align-items:center;gap:1px;flex-shrink:0;}
+.rc-logo{
+  width:34px;height:34px;
+  background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="%234285f4"/><stop offset="0.5" stop-color="%2334a853"/><stop offset="1" stop-color="%23fbbc04"/></linearGradient></defs><polygon points="32,4 56,18 56,46 32,60 8,46 8,18" fill="url(%23g)"/><polygon points="32,16 48,25.5 48,44.5 32,54 16,44.5 16,25.5" fill="white" opacity="0.85"/><polygon points="32,26 40,30.5 40,39.5 32,44 24,39.5 24,30.5" fill="url(%23g)"/></svg>') center/contain no-repeat;
+}
+.rc-brand{font-size:8px;color:#999;letter-spacing:0.3px;}
+.rc-links{font-size:7px;color:#bbb;}
+.rc-bar{background:#f1f1f1;border-top:1px solid #e5e5e5;padding:3px 12px;display:none;align-items:center;justify-content:space-between;font-size:10px;color:#aaa;}
+
+/* Slider puzzle */
+.puzzle-wrap{display:none;flex-direction:column;align-items:center;gap:0;}
+.pz-title{font-size:13px;font-weight:700;color:var(--text);text-align:center;margin-bottom:4px;}
+.pz-sub{font-size:11px;color:var(--text2);text-align:center;margin-bottom:14px;line-height:1.6;}
+
+/* Main image canvas */
+.img-wrap{
+  position:relative;width:100%;max-width:420px;
+  border-radius:10px;overflow:hidden;
+  border:1px solid rgba(201,168,76,0.2);
+}
+canvas.main-canvas{display:block;width:100%;height:auto;}
+canvas.piece-canvas{
+  position:absolute;top:0;left:0;
+  pointer-events:none;width:100%;height:100%;
+}
+
+/* Refresh button */
+.pz-refresh{
+  align-self:flex-start;margin-top:6px;
+  background:none;border:none;cursor:pointer;
+  color:var(--text3);font-size:16px;padding:4px;
+  transition:color 0.2s;
+}
+.pz-refresh:hover{color:var(--gold2);}
+
+/* Slider track */
+.slider-wrap{
+  width:100%;max-width:420px;
+  background:#1a1a24;border:1px solid rgba(255,255,255,0.1);
+  border-radius:8px;padding:4px;margin-top:10px;
+  position:relative;
+}
+.slider-track{
+  width:100%;height:42px;border-radius:6px;
+  background:#22222e;position:relative;overflow:hidden;
+  cursor:pointer;
+}
+.slider-fill{
+  height:100%;border-radius:6px 0 0 6px;
+  background:linear-gradient(90deg,rgba(201,168,76,0.15),rgba(201,168,76,0.08));
+  width:0%;transition:none;
+  position:absolute;left:0;top:0;
+}
+.slider-hint{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  font-size:12px;color:var(--text3);font-family:var(--mono);
+  letter-spacing:1px;white-space:nowrap;pointer-events:none;
+  transition:opacity 0.3s;
+}
+.slider-btn{
+  position:absolute;left:4px;top:50%;transform:translateY(-50%);
+  width:42px;height:34px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border-radius:5px;display:flex;align-items:center;justify-content:center;
+  cursor:grab;box-shadow:0 2px 10px var(--gold-glow);
+  transition:background 0.3s;font-size:16px;color:#000;font-weight:700;
+  user-select:none;-webkit-user-select:none;z-index:10;
+}
+.slider-btn:active{cursor:grabbing;}
+.slider-btn.err{background:linear-gradient(135deg,var(--red),#f87171);box-shadow:0 2px 10px rgba(239,68,68,0.3);}
+.slider-btn.ok{background:linear-gradient(135deg,var(--green),var(--green2));box-shadow:0 2px 10px var(--green-glow);}
+
+.pz-status{
+  font-size:11px;font-family:var(--mono);text-align:center;
+  min-height:16px;margin-top:8px;color:var(--text3);
+  letter-spacing:0.5px;
+}
+.pz-status.err{color:#f87171;}
+.pz-status.ok{color:var(--green2);}
+
+/* Success */
+.success-wrap{
+  display:none;flex-direction:column;
+  align-items:center;text-align:center;gap:14px;padding:8px 0;
+}
+.s-circle{
+  width:66px;height:66px;border-radius:50%;
+  background:var(--green-dim);border:2px solid var(--green);
+  display:flex;align-items:center;justify-content:center;font-size:28px;
+  animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow:0 0 28px var(--green-glow);
+}
+@keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.s-title{font-size:18px;font-weight:700;color:var(--green2);}
+.s-sub{font-size:11px;color:var(--text3);font-family:var(--mono);}
+.s-bar{width:200px;height:3px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden;}
+.s-fill{height:100%;background:var(--green);box-shadow:0 0 7px var(--green-glow);animation:rfill 2.5s ease forwards;}
+@keyframes rfill{from{width:0}to{width:100%}}
+
+.pg-footer{text-align:center;font-size:9px;color:var(--text3);font-family:var(--mono);letter-spacing:1.5px;}
 </style>
 </head>
-<body>
-<div class="noise"></div>
-<div id="splash">
-  <div class="splash-logo"><svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#c9a84c" stroke-width="1.5" stroke-linejoin="round" fill="none"/><path d="M2 17L12 22L22 17" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12L12 17L22 12" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-  <div class="splash-name">ADT GROUPS</div>
-  <div class="splash-tag">Smart Investments</div>
-  <div class="splash-spinner"></div>
-</div>
-<nav id="main-nav">
-  <a class="logo-wrap" href="/"><div class="logo-mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#c9a84c" stroke-width="1.5" stroke-linejoin="round" fill="none"/><path d="M2 17L12 22L22 17" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12L12 17L22 12" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="logo-name">ADT GROUPS</div><div class="logo-tag">Premium Investments</div></div></a>
-  <div class="nav-links"><a href="#investments">Investments</a><a href="#about">About Us</a><a href="#how">How It Works</a><a href="#contact">Contact</a></div>
-  <div class="nav-right">
-    <div class="lang-switcher"><button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button><button class="lang-btn" data-lang="hinglish" onclick="setLang('hinglish')">HIN</button><button class="lang-btn" data-lang="hindi" onclick="setLang('hindi')">हिं</button></div>
-    <button class="btn btn-ghost btn-sm" onclick="openAuth('login')">Login</button>
-    <button class="btn btn-gold btn-sm" onclick="openAuth('register')">Sign Up</button>
-    <button class="mobile-menu-btn" onclick="toggleMobileNav()">☰</button>
-  </div>
-</nav>
-<div class="mobile-nav" id="mobile-nav">
-  <a href="#investments" onclick="toggleMobileNav()">Investments</a>
-  <a href="#about" onclick="toggleMobileNav()">About Us</a>
-  <a href="#how" onclick="toggleMobileNav()">How It Works</a>
-  <a href="#contact" onclick="toggleMobileNav()">Contact</a>
-  <div class="mobile-nav-btns"><button class="btn btn-ghost btn-sm btn-full" onclick="openAuth('login');toggleMobileNav()">Login</button><button class="btn btn-gold btn-sm btn-full" onclick="openAuth('register');toggleMobileNav()">Sign Up</button></div>
-</div>
-<section class="hero">
-  <div class="hero-bg"></div><div class="hero-bg-img"></div><div class="hero-grid"></div>
-  <div class="hero-inner">
-    <div class="anim-1">
-      <div class="hero-badge"><span class="dot"></span> Smart Investments. Stronger Futures.</div>
-      <h1 class="hero-h1 anim-2"><span class="white">Invest Today,</span><span class="gold">Grow Tomorrow.</span></h1>
-      <p class="hero-sub anim-3">ADT GROUPS offers curated investment opportunities across Farming, Real Estate &amp; Business to help you build sustainable wealth.</p>
-      <div class="hero-cta anim-4">
-        <button class="btn btn-gold btn-lg" onclick="openAuth('register')">Explore Investments →</button>
-        <button class="btn btn-ghost btn-lg" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg> How It Works</button>
-      </div>
-      <div class="hero-trust anim-5">
-        <div class="trust-item"><div class="trust-icon">🛡️</div><div><div class="trust-val">Secure & Transparent</div><div class="trust-lbl">Bank-level security</div></div></div>
-        <div class="trust-item"><div class="trust-icon">📈</div><div><div class="trust-val">High Returns</div><div class="trust-lbl">Curated opportunities</div></div></div>
-        <div class="trust-item"><div class="trust-icon">👥</div><div><div class="trust-val">Trusted by Thousands</div><div class="trust-lbl">125K+ investors</div></div></div>
-      </div>
-    </div>
-    <div class="hero-right anim-3">
-      <div class="hero-card">
-        <div class="card-hdr"><div class="card-logo">A</div><div class="card-logo-txt">ADT GROUPS</div><span class="badge badge-green" style="margin-left:auto;"><span class="status-dot green"></span> Live</span></div>
-        <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:2px;">Total Portfolio Value</div>
-        <div class="card-pval">₹24,75,000</div>
-        <div class="card-pchg">▲ +₹2,45,000 (11.00%) this month</div>
-        <div class="mini-chart"></div>
-        <div class="card-stats"><div class="cs-item"><div class="cs-lbl">Total Invested</div><div class="cs-val" style="color:var(--gold2)">₹20,30,000</div></div><div class="cs-item"><div class="cs-lbl">Total Returns</div><div class="cs-val" style="color:var(--green2)">₹4,45,000</div></div></div>
-      </div>
-      <div class="hero-mini-card"><div class="mini-invest"><div class="mini-av">A</div><div><div style="font-size:11px;color:var(--text2);">New investment added</div><div style="font-size:13px;font-weight:700;color:var(--green2);">+₹50,000 · Organic Farm</div></div></div></div>
-    </div>
-  </div>
-</section>
-<section class="stats-bar">
-  <div class="stats-bar-inner">
-    <div class="sbi"><div class="sbi-icon">👥</div><div class="sbi-num">125K+</div><div class="sbi-label">Total Investors</div><div class="sbi-change">+12.5% this month</div></div>
-    <div class="sbi"><div class="sbi-icon">💰</div><div class="sbi-num">₹850Cr+</div><div class="sbi-label">Total Investments</div><div class="sbi-change">+18.7% this month</div></div>
-    <div class="sbi"><div class="sbi-icon">📊</div><div class="sbi-num">16.8%</div><div class="sbi-label">Average Returns</div><div class="sbi-change">+2.3% vs last month</div></div>
-    <div class="sbi"><div class="sbi-icon">🛡️</div><div class="sbi-num">99.9%</div><div class="sbi-label">Payout Success Rate</div><div class="sbi-change">Consistent & Reliable</div></div>
-  </div>
-</section>
-<section class="section" id="investments">
-  <div class="sec-eyebrow">Investment Categories</div>
-  <div class="sec-title">Choose Your Growth Path</div>
-  <div class="sec-sub">Select a category based on your goals and risk appetite.</div>
-  <div class="cat-grid">
-    <div class="cat-card cat-farming" onclick="goProducts('farming')">
-      <div class="cat-img-wrap"><div class="cat-img-bg" id="cat-img-farming" style="background-image:url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&q=80')"></div><div class="cat-img-overlay" style="background:linear-gradient(180deg,rgba(0,0,0,0.1) 0%,rgba(6,30,12,0.72) 100%)"></div><div class="cat-img-icon">🌾</div></div>
-      <div class="cat-body"><div class="cat-accent" style="color:var(--green2)">Farming / Agriculture</div><div class="cat-name" id="cat-name-farming">Agriculture</div><div class="cat-desc" id="cat-desc-farming">Invest in sustainable agriculture &amp; organic farming projects.</div><div class="cat-feats"><div class="cat-feat"><div class="cat-feat-dot" style="background:var(--green2)"></div>Sustainable &amp; Organic Farming</div><div class="cat-feat"><div class="cat-feat-dot" style="background:var(--green2)"></div>High Yield Potential</div></div><button class="cat-btn" style="background:linear-gradient(135deg,var(--green),#16a34a);color:#fff;">Explore Farming →</button></div>
-    </div>
-    <div class="cat-card cat-realestate" onclick="goProducts('realestate')">
-      <div class="cat-img-wrap"><div class="cat-img-bg" id="cat-img-realestate" style="background-image:url('https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=80')"></div><div class="cat-img-overlay" style="background:linear-gradient(180deg,rgba(0,0,0,0.1) 0%,rgba(30,20,0,0.72) 100%)"></div><div class="cat-img-icon">🏛️</div></div>
-      <div class="cat-body"><div class="cat-accent" style="color:var(--gold2)">Real Estate</div><div class="cat-name" id="cat-name-realestate">Real Estate</div><div class="cat-desc" id="cat-desc-realestate">Build wealth with premium real estate opportunities.</div><div class="cat-feats"><div class="cat-feat"><div class="cat-feat-dot" style="background:var(--gold2)"></div>Residential &amp; Commercial</div><div class="cat-feat"><div class="cat-feat-dot" style="background:var(--gold2)"></div>Asset-backed Security</div></div><button class="cat-btn" style="background:linear-gradient(135deg,var(--gold),#a07828);color:#000;font-weight:700;">Explore Real Estate →</button></div>
-    </div>
-    <div class="cat-card cat-business" onclick="goProducts('business')">
-      <div class="cat-img-wrap"><div class="cat-img-bg" id="cat-img-business" style="background-image:url('https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=600&q=80')"></div><div class="cat-img-overlay" style="background:linear-gradient(180deg,rgba(0,0,0,0.1) 0%,rgba(0,10,40,0.72) 100%)"></div><div class="cat-img-icon">💼</div></div>
-      <div class="cat-body"><div class="cat-accent" style="color:var(--blue2)">Business</div><div class="cat-name" id="cat-name-business">Business</div><div class="cat-desc" id="cat-desc-business">Invest in innovative businesses &amp; high-growth startups.</div><div class="cat-feats"><div class="cat-feat"><div class="cat-feat-dot" style="background:var(--blue2)"></div>Diverse Opportunities</div><div class="cat-feat"><div class="cat-feat-dot" style="background:var(--blue2)"></div>High Growth Potential</div></div><button class="cat-btn" style="background:linear-gradient(135deg,var(--blue),#1d4ed8);color:#fff;">Explore Business →</button></div>
-    </div>
-  </div>
-</section>
-<section class="why-section" id="how">
-  <div class="section" style="padding-bottom:80px;">
-    <div class="sec-eyebrow">Why ADT GROUPS</div>
-    <div class="sec-title">Secure Investments.<br>Trusted Platform.</div>
-    <div class="sec-sub">Your investments are protected with bank-level security and transparent operations.</div>
-    <div class="why-grid">
-      <div class="why-card"><div class="why-icon">🔐</div><div class="why-title">Bank-Level Security</div><div class="why-text">Your data and investments are fully encrypted and secure with 256-bit SSL encryption and Firebase security rules.</div></div>
-      <div class="why-card"><div class="why-icon">📊</div><div class="why-title">Transparent Returns</div><div class="why-text">Real-time portfolio tracking. Every investment detail is clearly visible in your personal dashboard.</div></div>
-      <div class="why-card"><div class="why-icon">⚡</div><div class="why-title">Fast Withdrawals</div><div class="why-text">Withdrawals processed within 24-48 hours. 99.9% payout success rate — reliable every time.</div></div>
-    </div>
-  </div>
-</section>
-<div id="contact" style="border-top:1px solid var(--border);">
-  <div class="site-footer">
-    <div class="logo-wrap" style="cursor:default;"><div class="logo-mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#c9a84c" stroke-width="1.5" stroke-linejoin="round" fill="none"/><path d="M2 17L12 22L22 17" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="logo-name" style="font-size:15px;">ADT GROUPS</div><div class="logo-tag">© 2025 All rights reserved</div></div></div>
-    <div class="footer-links"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Support</a></div>
-  </div>
-</div>
+<body oncontextmenu="return false">
+<div class="bg-grid"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
 
-<!-- AUTH OVERLAY -->
-<div class="auth-overlay" id="auth-overlay">
-  <div class="auth-panel" id="auth-panel">
-    <button class="auth-close" onclick="closeAuthPanel()">✕</button>
-    <div class="auth-logo-wrap">
-      <div class="auth-logo-mark"><div class="auth-logo-inner">A</div></div>
-      <div class="auth-title">ADT GROUPS</div>
-      <div class="auth-sub">Access your investment account</div>
-    </div>
-    <div class="auth-tabs" id="auth-tabs">
-      <button class="auth-tab active" onclick="switchAuthTab('login')">Login</button>
-      <button class="auth-tab" onclick="switchAuthTab('register')">Register</button>
-    </div>
+<div class="wrap">
 
-    <!-- LOGIN -->
-    <div class="auth-form active" id="form-login">
-      <div class="msg-error" id="login-err"></div>
-      <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" id="l-email" type="email" placeholder="your@email.com" autocomplete="email"></div>
-      <div class="form-group"><label class="form-label">Password</label><input class="form-input" id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
-      <button class="btn btn-gold btn-full btn-lg" id="login-btn" onclick="doLogin()">Login →</button>
-      <div style="display:flex;align-items:center;gap:10px;margin:14px 0;"><div style="flex:1;height:1px;background:var(--border);"></div><span style="font-size:11px;color:var(--text3);">OR</span><div style="flex:1;height:1px;background:var(--border);"></div></div>
-      <button class="btn btn-ghost btn-full" onclick="doGoogleAuth()" style="display:flex;align-items:center;justify-content:center;gap:10px;">
-        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 33.2 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 19.7-8 19.7-20 0-1.3-.1-2.7-.1-4z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.1 19 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.5 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-1.9 13.5-5l-6.2-5.2C29.4 35.6 26.8 36 24 36c-5.2 0-9.6-2.8-11.3-7L6 34.3C9.4 39.7 16.3 44 24 44z"/><path fill="#1976D2" d="M43.6 20H24v8h11.3c-.9 2.5-2.6 4.6-4.8 6l6.2 5.2C40.6 35.5 44 30.2 44 24c0-1.3-.1-2.7-.4-4z"/></svg>
-        Continue with Google
-      </button>
-      <div style="text-align:center;margin-top:13px;"><a onclick="switchAuthTab('forgot')" style="font-size:13px;color:var(--gold2);cursor:pointer;">🔑 Forgot Password?</a></div>
+  <!-- Header -->
+  <div class="adt-hdr">
+    <div class="brand">
+      <div class="logo">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="#c9a84c" stroke-width="1.5" fill="rgba(201,168,76,0.12)"/>
+          <path d="M12 7L8 9.5v5L12 17l4-2.5v-5L12 7z" fill="#c9a84c" opacity="0.8"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-name">ADT Groups</div>
+        <div class="brand-tag">Secure Access Portal</div>
+      </div>
     </div>
+    <div class="ssl"><div class="ssl-dot"></div>SSL Secured</div>
+  </div>
 
-    <!-- REGISTER -->
-    <div class="auth-form" id="form-register">
-      <div class="msg-error" id="reg-err"></div>
-      <div class="msg-success" id="reg-ok"></div>
-      <div class="form-group"><label class="form-label">Full Name</label><input class="form-input" id="r-name" type="text" placeholder="Your full name" autocomplete="name"></div>
-      <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" id="r-email" type="email" placeholder="your@email.com" autocomplete="email"></div>
-      <div class="form-group"><label class="form-label">Mobile Number</label><input class="form-input" id="r-phone" type="tel" placeholder="+91 XXXXX XXXXX" autocomplete="tel"></div>
-      <div class="form-group"><label class="form-label">Password</label><input class="form-input" id="r-pass" type="password" placeholder="Minimum 6 characters" autocomplete="new-password"></div>
-      <div class="recovery-box">
-        <div class="recovery-icon">🔑</div>
-        <div class="recovery-title">Recovery Secret Text — Important!</div>
-        <div class="recovery-text">Used to recover your account if you forget your password. <strong style="color:var(--gold2);">📸 Note it down or take a screenshot — you will need it!</strong></div>
+  <!-- Warning -->
+  <div class="warn-box">
+    <div class="warn-ico">⚠️</div>
+    <div>
+      <div class="warn-title">Unusual Activity Detected</div>
+      <div class="warn-body">
+        We have detected <b>unusual access patterns</b> from your network.
+        Please complete a quick <b>human verification</b> to continue.
+        This check will not repeat for <b>7 days</b>.
       </div>
-      <div class="form-group">
-        <input class="form-input" id="r-recovery" type="text" placeholder="Your secret phrase (e.g. my first pet name)" autocomplete="off">
-        <div class="form-hint" style="color:var(--gold2);font-weight:600;">⚠️ Screenshot this — needed for password recovery</div>
-      </div>
-      <button class="btn btn-gold btn-full btn-lg" id="reg-btn" onclick="doRegister()">Create Account →</button>
-      <div style="display:flex;align-items:center;gap:10px;margin:14px 0;"><div style="flex:1;height:1px;background:var(--border);"></div><span style="font-size:11px;color:var(--text3);">OR</span><div style="flex:1;height:1px;background:var(--border);"></div></div>
-      <button class="btn btn-ghost btn-full" onclick="doGoogleAuth()" style="display:flex;align-items:center;justify-content:center;gap:10px;">
-        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 33.2 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 19.7-8 19.7-20 0-1.3-.1-2.7-.1-4z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.1 19 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.5 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-1.9 13.5-5l-6.2-5.2C29.4 35.6 26.8 36 24 36c-5.2 0-9.6-2.8-11.3-7L6 34.3C9.4 39.7 16.3 44 24 44z"/><path fill="#1976D2" d="M43.6 20H24v8h11.3c-.9 2.5-2.6 4.6-4.8 6l6.2 5.2C40.6 35.5 44 30.2 44 24c0-1.3-.1-2.7-.4-4z"/></svg>
-        Sign up with Google
-      </button>
-    </div>
-
-    <!-- FORGOT -->
-    <div class="auth-form" id="form-forgot">
-      <div style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.5;">Verify with your email and recovery text to reset your password.</div>
-      <div class="step-dots"><div class="step-dot done" id="sd1"></div><div class="step-dot" id="sd2"></div></div>
-      <div class="msg-error" id="forgot-err"></div>
-      <div class="msg-success" id="forgot-ok"></div>
-      <div class="forgot-step active" id="fs1">
-        <div class="form-group"><label class="form-label">Registered Email</label><input class="form-input" id="f-email" type="email" placeholder="your@email.com"></div>
-        <div class="form-group"><label class="form-label">🔑 Recovery Secret Text</label><input class="form-input" id="f-recovery" placeholder="The phrase you set at registration"></div>
-        <button class="btn btn-gold btn-full" id="verify-btn" onclick="doForgotVerify()">Verify →</button>
-      </div>
-      <div class="forgot-step" id="fs2">
-        <div style="background:var(--green-dim);border:1px solid rgba(29,185,84,0.2);border-radius:12px;padding:14px;margin-bottom:16px;font-size:13px;color:var(--green2);line-height:1.5;">✅ Identity verified! A password reset link will be sent to your email.</div>
-        <button class="btn btn-green btn-full btn-lg" id="reset-btn" onclick="doResetPass()">Send Reset Link →</button>
-        <div style="display:flex;align-items:center;gap:10px;margin:14px 0;"><div style="flex:1;height:1px;background:var(--border);"></div><span style="font-size:11px;color:var(--text3);">OR login with same email</span><div style="flex:1;height:1px;background:var(--border);"></div></div>
-        <button class="btn btn-ghost btn-full" onclick="doGoogleAuthForgot()" style="display:flex;align-items:center;justify-content:center;gap:10px;">
-          <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 33.2 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 19.7-8 19.7-20 0-1.3-.1-2.7-.1-4z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.1 19 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.5 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-1.9 13.5-5l-6.2-5.2C29.4 35.6 26.8 36 24 36c-5.2 0-9.6-2.8-11.3-7L6 34.3C9.4 39.7 16.3 44 24 44z"/><path fill="#1976D2" d="M43.6 20H24v8h11.3c-.9 2.5-2.6 4.6-4.8 6l6.2 5.2C40.6 35.5 44 30.2 44 24c0-1.3-.1-2.7-.4-4z"/></svg>
-          Continue with Google (same email)
-        </button>
-      </div>
-      <div class="auth-switch"><a onclick="switchAuthTab('login')">← Back to Login</a></div>
     </div>
   </div>
+
+  <!-- Main Card -->
+  <div class="main-card">
+    <div class="card-hdr">
+      <div class="chdr-l">
+        <div class="hdr-dot"></div>
+        <div class="hdr-t">Identity Verification</div>
+      </div>
+      <div class="hdr-url">adtgroupsltd.web.app</div>
+    </div>
+    <div class="card-body">
+
+      <!-- Steps -->
+      <div class="steps">
+        <div class="si"><div class="sn act" id="sn0">1</div><div class="sl act" id="sl0">Bot Check</div></div>
+        <div class="s-line"></div>
+        <div class="si"><div class="sn" id="sn1">2</div><div class="sl" id="sl1">Slide</div></div>
+        <div class="s-line"></div>
+        <div class="si"><div class="sn" id="sn2">3</div><div class="sl" id="sl2">Access</div></div>
+      </div>
+
+      <!-- Step 1: reCAPTCHA -->
+      <div id="step-rc">
+        <div class="rc-box">
+          <div class="rc-inner">
+            <div class="rc-cb" id="rc-cb" onclick="startRC()">
+              <div class="rc-spin" id="rc-spin"></div>
+              <div class="rc-tick" id="rc-tick">✓</div>
+            </div>
+            <div class="rc-txt">
+              <div class="rc-lbl" id="rc-lbl">I'm not a robot</div>
+              <div class="rc-sub" id="rc-sub">Verifying your browser...</div>
+            </div>
+            <div class="rc-rgt">
+              <div class="rc-logo"></div>
+              <div class="rc-brand">reCAPTCHA</div>
+              <div class="rc-links">Privacy · Terms</div>
+            </div>
+          </div>
+          <div class="rc-bar" id="rc-bar">
+            <span>🔒 Protected by Google reCAPTCHA</span>
+            <span id="rc-score">Analyzing...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Slider Puzzle -->
+      <div class="puzzle-wrap" id="step-puzzle">
+        <div class="pz-title">Slide the piece to complete the image</div>
+        <div class="pz-sub">Hold and drag the button to fit the puzzle piece into the gap</div>
+
+        <div class="img-wrap" id="img-wrap">
+          <canvas class="main-canvas" id="main-canvas"></canvas>
+          <canvas class="piece-canvas" id="piece-canvas"></canvas>
+        </div>
+
+        <button class="pz-refresh" id="pz-refresh" onclick="initPuzzle()">↺ New image</button>
+
+        <div class="slider-wrap" id="slider-wrap">
+          <div class="slider-track" id="slider-track">
+            <div class="slider-fill" id="slider-fill"></div>
+            <div class="slider-hint" id="slider-hint">&gt;&gt; Hold and slide</div>
+            <div class="slider-btn" id="slider-btn">⟫</div>
+          </div>
+        </div>
+        <div class="pz-status" id="pz-status"></div>
+      </div>
+
+      <!-- Success -->
+      <div class="success-wrap" id="step-success">
+        <div class="s-circle">✓</div>
+        <div class="s-title">Verification Complete!</div>
+        <div class="s-sub">Access granted — redirecting to ADT Groups...</div>
+        <div class="s-bar"><div class="s-fill"></div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="pg-footer">ADT GROUPS SECURITY SYSTEM v3.0 — ALL RIGHTS RESERVED</div>
 </div>
 
-<div class="float-widget" id="float-widget">
-  <button class="float-btn float-tg" data-tooltip="Telegram" onclick="openTG()"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></button>
-  <button class="float-btn float-help" data-tooltip="Support" onclick="openHelp()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg></button>
-</div>
-
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js"></script>
-<script src="firebase-config.js"></script>
 <script>
-let siteSettings={tg:'https://t.me/adtgroups',help:'support.html'};
-let _forgotEmail='';
-let _registering=false; // ✅ Flag to prevent auth state interference during register
-const urlParams=new URLSearchParams(window.location.search);
-const refCode=urlParams.get('ref')||'';
+// ── Config ──
+const FROM_URL  = new URLSearchParams(window.location.search).get('from') || '/home';
+const REDIRECT  = FROM_URL.startsWith('/') ? FROM_URL : '/home';
+const TOKEN_KEY = 'adt_sec_v1';
+const SALT      = 'ADT_2025_SECURE_XK9';
+const DAYS      = 7;
+const TOLERANCE = 12; // px tolerance
 
-// ── AUTH STATE ──────────────────────────────────────────────
-auth.onAuthStateChanged(async user=>{
-  hideSplash();
-  if(!user)return;
-  if(_registering)return; // ✅ Skip during manual registration — doRegister handles it
-  try{
-    const doc=await db.collection('users').doc(user.uid).get();
-    if(doc.exists){
-      // Show loading
-      const panel=document.getElementById('auth-panel');
-      const overlay=document.getElementById('auth-overlay');
-      if(panel)panel.innerHTML='<div style="text-align:center;padding:60px 20px;"><div class="spinner" style="margin:0 auto 16px;"></div><div style="color:var(--text2);font-size:14px;">Signing you in...</div></div>';
-      if(overlay)overlay.classList.add('open');
-      redirectUser(user,doc.data());
-      return;
-    }
-    // New Google user — create doc
-    const isGoogle=user.providerData.some(p=>p.providerId==='google.com');
-    if(isGoogle){
-      const panel=document.getElementById('auth-panel');
-      const overlay=document.getElementById('auth-overlay');
-      if(panel)panel.innerHTML='<div style="text-align:center;padding:60px 20px;"><div class="spinner" style="margin:0 auto 16px;"></div><div style="color:var(--text2);font-size:14px;">Setting up your account...</div></div>';
-      if(overlay)overlay.classList.add('open');
-      const myRefCode=generateRefCode(user.uid);
-      await db.collection('users').doc(user.uid).set({
-        name:user.displayName||'Investor',
-        email:user.email||'',
-        phone:'',recoveryText:'',
-        balance:0,invested:0,returns:0,
-        role:'user',
-        referralCode:myRefCode,
-        referredBy:refCode||'',
-        createdAt:firebase.firestore.FieldValue.serverTimestamp()
-      });
-      window.location.href='/dashboard';
-    }
-  }catch(e){console.error(e);}
+// Disable shortcuts
+document.addEventListener('keydown',e=>{
+  if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&'IJCU'.includes(e.key.toUpperCase()))||
+     (e.ctrlKey&&'USA'.includes(e.key.toUpperCase()))){e.preventDefault();}
 });
 
-function redirectUser(user,data){
-  window.location.href=data&&data.role==='admin'?'/admin.html':'/dashboard';
+// Token
+function getToken(){
+  try{const t=JSON.parse(localStorage.getItem(TOKEN_KEY));
+    if(!t||Date.now()>t.exp){localStorage.removeItem(TOKEN_KEY);return null;}return t;
+  }catch{return null;}
+}
+function saveToken(){
+  const v=btoa(Date.now()+'_'+SALT+'_'+Math.random().toString(36).slice(2));
+  localStorage.setItem(TOKEN_KEY,JSON.stringify({v,exp:Date.now()+DAYS*86400000}));
+  return v;
+}
+if(getToken()){window.location.href=REDIRECT;}
+
+// Steps
+function stepDone(n){
+  document.getElementById('sn'+n).classList.replace('act','done');
+  document.getElementById('sn'+n).textContent='✓';
+  document.getElementById('sl'+n).classList.replace('act','done');
+}
+function stepAct(n){
+  document.getElementById('sn'+n).classList.add('act');
+  document.getElementById('sl'+n).classList.add('act');
 }
 
-// ── LOAD DATA ───────────────────────────────────────────────
-async function loadData(){
-  try{
-    const[settingsDoc,catsSnap]=await Promise.all([
-      db.collection('settings').doc('site').get(),
-      db.collection('categories').get()
-    ]);
-    if(settingsDoc.exists)siteSettings={...siteSettings,...settingsDoc.data()};
-    catsSnap.forEach(d=>{
-      const cat=d.data(),id=d.id;
-      if(cat.image){const el=document.getElementById('cat-img-'+id);if(el)el.style.backgroundImage=`url('${cat.image}')`;}
-      if(cat.name){const el=document.getElementById('cat-name-'+id);if(el)el.textContent=cat.name;}
-      if(cat.description){const el=document.getElementById('cat-desc-'+id);if(el)el.textContent=cat.description;}
-    });
-  }catch(e){}
+// ── reCAPTCHA ──
+let rcDone=false;
+function startRC(){
+  if(rcDone)return; rcDone=true;
+  const cb=document.getElementById('rc-cb');
+  const spin=document.getElementById('rc-spin');
+  const tick=document.getElementById('rc-tick');
+  const lbl=document.getElementById('rc-lbl');
+  const sub=document.getElementById('rc-sub');
+  const bar=document.getElementById('rc-bar');
+  const score=document.getElementById('rc-score');
+  cb.classList.add('chk');spin.style.display='block';
+  sub.style.display='block';bar.style.display='flex';
+  setTimeout(()=>score.textContent='Checking behavior...',500);
+  setTimeout(()=>score.textContent='Score: 0.9 ✓',1400);
+  setTimeout(()=>{
+    spin.style.display='none';tick.style.display='block';
+    cb.classList.remove('chk');cb.classList.add('ok');
+    lbl.textContent='Verified!';sub.textContent='reCAPTCHA passed ✓';
+    stepDone(0);stepAct(1);
+    setTimeout(()=>{
+      document.getElementById('step-rc').style.display='none';
+      document.getElementById('step-puzzle').style.display='flex';
+      initPuzzle();
+    },700);
+  },2200);
 }
-loadData();
 
-// ── REGISTER ────────────────────────────────────────────────
-async function doRegister(){
-  const name=document.getElementById('r-name').value.trim();
-  const email=document.getElementById('r-email').value.trim();
-  const phone=document.getElementById('r-phone').value.trim();
-  const pass=document.getElementById('r-pass').value;
-  const recovery=document.getElementById('r-recovery').value.trim();
-  hideMsg('reg-err');
-  if(!name||!email||!pass||!recovery){showMsg('reg-err',t('all_fields'));return;}
-  if(pass.length<6){showMsg('reg-err',t('pass_short'));return;}
-  if(recovery.length<3){showMsg('reg-err',t('recovery_short'));return;}
-  const btn=document.getElementById('reg-btn');
-  btn.disabled=true;btn.textContent='Creating account...';
-  _registering=true; // ✅ Block auth state handler
-  try{
-    const cred=await auth.createUserWithEmailAndPassword(email,pass);
-    const uid=cred.user.uid;
-    const myRefCode=generateRefCode(uid);
-    await db.collection('users').doc(uid).set({
-      name,email,phone:phone||'',
-      recoveryText:encryptStr(recovery),
-      balance:0,invested:0,returns:0,
-      role:'user',
-      referralCode:myRefCode,
-      referredBy:refCode||'',
-      createdAt:firebase.firestore.FieldValue.serverTimestamp()
-    });
-    if(refCode){
-      await db.collection('referrals').add({
-        refCode,newUserId:uid,newUserEmail:email,
-        status:'pending',createdAt:firebase.firestore.FieldValue.serverTimestamp()
-      });
+// ── 7 Image Generators ──
+const IMGS=[
+  function(ctx,w,h){// Sunset
+    const g=ctx.createLinearGradient(0,0,0,h);
+    g.addColorStop(0,'#1a0533');g.addColorStop(0.35,'#6b1a4e');
+    g.addColorStop(0.6,'#c9503a');g.addColorStop(0.75,'#e8a23c');g.addColorStop(1,'#f5d76e');
+    ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+    const sg=ctx.createRadialGradient(w*.5,h*.6,0,w*.5,h*.6,w*.14);
+    sg.addColorStop(0,'#fff9c4');sg.addColorStop(0.5,'#f5d76e');sg.addColorStop(1,'rgba(245,215,110,0)');
+    ctx.fillStyle=sg;ctx.beginPath();ctx.arc(w*.5,h*.6,w*.14,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#12011f';
+    ctx.beginPath();ctx.moveTo(0,h);ctx.lineTo(w*.15,h*.5);ctx.lineTo(w*.3,h*.68);
+    ctx.lineTo(w*.45,h*.38);ctx.lineTo(w*.6,h*.58);ctx.lineTo(w*.75,h*.35);
+    ctx.lineTo(w*.88,h*.55);ctx.lineTo(w,h*.45);ctx.lineTo(w,h);ctx.closePath();ctx.fill();
+  },
+  function(ctx,w,h){// Ocean
+    const g=ctx.createLinearGradient(0,0,0,h);
+    g.addColorStop(0,'#0c1f3f');g.addColorStop(0.42,'#0e3060');
+    g.addColorStop(0.43,'#1a5276');g.addColorStop(1,'#0a1929');
+    ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+    for(let i=0;i<8;i++){
+      ctx.strokeStyle=`rgba(100,180,255,${0.28-i*0.025})`;
+      ctx.lineWidth=1.5;ctx.beginPath();
+      const y=h*0.44+i*h*0.072;
+      for(let x=0;x<=w;x+=4){
+        const wy=y+Math.sin((x/w)*Math.PI*5+i)*5;
+        x===0?ctx.moveTo(x,wy):ctx.lineTo(x,wy);
+      }ctx.stroke();
     }
-    showMsg('reg-ok',t('account_created'),'success');
-    setTimeout(()=>window.location.href='/dashboard',1500);
-  }catch(e){
-    _registering=false; // ✅ Re-enable on error
-    showMsg('reg-err',e.code==='auth/email-already-in-use'?t('email_exists'):e.message);
-    btn.disabled=false;btn.textContent='Create Account →';
-  }
-}
-
-// ── GOOGLE AUTH ─────────────────────────────────────────────
-async function doGoogleAuth(){
-  hideMsg('login-err');hideMsg('reg-err');
-  try{
-    const provider=new firebase.auth.GoogleAuthProvider();
-    await auth.signInWithPopup(provider);
-  }catch(e){
-    if(e.code!=='auth/popup-closed-by-user')showMsg('login-err','Google sign-in failed: '+e.message);
-  }
-}
-
-async function doGoogleAuthForgot(){
-  hideMsg('forgot-err');
-  try{
-    const provider=new firebase.auth.GoogleAuthProvider();
-    if(_forgotEmail)provider.setCustomParameters({login_hint:_forgotEmail});
-    await auth.signInWithPopup(provider);
-  }catch(e){
-    if(e.code!=='auth/popup-closed-by-user')showMsg('forgot-err','Google sign-in failed: '+e.message);
-  }
-}
-
-// ── LOGIN ────────────────────────────────────────────────────
-async function doLogin(){
-  const email=document.getElementById('l-email').value.trim();
-  const pass=document.getElementById('l-pass').value;
-  if(!email||!pass){showMsg('login-err',t('all_fields'));return;}
-  const btn=document.getElementById('login-btn');
-  btn.disabled=true;btn.textContent='Logging in...';
-  try{
-    await auth.signInWithEmailAndPassword(email,pass);
-    // auth.onAuthStateChanged will handle redirect
-  }catch(e){
-    showMsg('login-err',t('wrong_credentials'));
-    btn.disabled=false;btn.textContent='Login →';
-  }
-}
-
-// ── FORGOT PASSWORD ──────────────────────────────────────────
-async function doForgotVerify(){
-  const email=document.getElementById('f-email').value.trim();
-  const recovery=document.getElementById('f-recovery').value.trim();
-  if(!email||!recovery){showMsg('forgot-err','Please fill both fields.');return;}
-  const btn=document.getElementById('verify-btn');
-  btn.disabled=true;btn.textContent='Verifying...';
-  hideMsg('forgot-err');
-  try{
-    const snap=await db.collection('users').where('email','==',email).limit(1).get();
-    if(snap.empty){showMsg('forgot-err',t('email_not_found'));btn.disabled=false;btn.textContent='Verify →';return;}
-    const stored=snap.docs[0].data().recoveryText||'';
-    const decoded=decryptStr(stored);
-    if(decoded===recovery){
-      _forgotEmail=email;
-      document.getElementById('fs1').classList.remove('active');
-      document.getElementById('fs2').classList.add('active');
-      document.getElementById('sd2').classList.add('done');
-      showMsg('forgot-ok',t('verified'),'success');
-    }else{
-      showMsg('forgot-err',t('recovery_wrong'));
-      btn.disabled=false;btn.textContent='Verify →';
+    ctx.fillStyle='rgba(255,248,180,0.9)';ctx.beginPath();ctx.arc(w*.5,h*.18,w*.055,0,Math.PI*2);ctx.fill();
+  },
+  function(ctx,w,h){// Forest night
+    const g=ctx.createLinearGradient(0,0,0,h);
+    g.addColorStop(0,'#0a1628');g.addColorStop(0.55,'#0d2b1a');g.addColorStop(1,'#061510');
+    ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+    function tree(x,y,ht,c){
+      ctx.fillStyle=c;ctx.beginPath();
+      ctx.moveTo(x,y-ht);ctx.lineTo(x-ht*.35,y);ctx.lineTo(x+ht*.35,y);ctx.closePath();ctx.fill();
+      ctx.beginPath();ctx.moveTo(x,y-ht*.72);ctx.lineTo(x-ht*.42,y-ht*.16);ctx.lineTo(x+ht*.42,y-ht*.16);ctx.closePath();ctx.fill();
     }
-  }catch(e){showMsg('forgot-err','Error: '+e.message);btn.disabled=false;btn.textContent='Verify →';}
+    [[.1,1,h*.28,'#0a5222'],[.22,1,h*.34,'#0d5c28'],[.38,1,h*.3,'#0a5222'],
+     [.55,1,h*.38,'#116328'],[.7,1,h*.26,'#0d5c28'],[.84,1,h*.32,'#0a5222'],
+     [.96,1,h*.28,'#0d5c28']].forEach(([x,y,ht,c])=>tree(x*w,y*h,ht,c));
+    ctx.fillStyle='#fff9e6';ctx.beginPath();ctx.arc(w*.7,h*.15,w*.055,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#0a1628';ctx.beginPath();ctx.arc(w*.74,h*.13,w*.045,0,Math.PI*2);ctx.fill();
+  },
+  function(ctx,w,h){// City skyline
+    ctx.fillStyle='#040812';ctx.fillRect(0,0,w,h);
+    const blds=[[0,.72,w*.12],[w*.1,.58,w*.1],[w*.18,.68,w*.15],[w*.32,.48,w*.08],
+      [w*.38,.78,w*.18],[w*.54,.62,w*.13],[w*.65,.52,w*.11],[w*.74,.82,w*.15],[w*.87,.64,w*.13]];
+    blds.forEach(([x,ty,bw])=>{
+      ctx.fillStyle='#0d1b33';ctx.fillRect(x,ty*h,bw,h-ty*h);
+      ctx.fillStyle='rgba(255,235,130,0.65)';
+      for(let wy=ty*h+8;wy<h-6;wy+=11)
+        for(let wx=x+4;wx<x+bw-4;wx+=8)
+          if(Math.random()>.4)ctx.fillRect(wx,wy,4,5);
+    });
+    const gg=ctx.createLinearGradient(0,h*.88,0,h);
+    gg.addColorStop(0,'rgba(201,168,76,0.06)');gg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=gg;ctx.fillRect(0,h*.88,w,h*.12);
+  },
+  function(ctx,w,h){// Galaxy
+    ctx.fillStyle='#020208';ctx.fillRect(0,0,w,h);
+    ctx.fillStyle='rgba(255,255,255,0.55)';
+    for(let i=0;i<100;i++){ctx.beginPath();ctx.arc(Math.random()*w,Math.random()*h,Math.random(),0,Math.PI*2);ctx.fill();}
+    const cx=w/2,cy=h/2;
+    for(let arm=0;arm<3;arm++){
+      const ao=arm*(Math.PI*2/3);
+      for(let i=0;i<70;i++){
+        const t=i/70,angle=t*Math.PI*4+ao,rad=t*Math.min(w,h)*.4;
+        const x=cx+Math.cos(angle)*rad,y=cy+Math.sin(angle)*rad,sp=t*12;
+        for(let j=0;j<3;j++){
+          ctx.fillStyle=`rgba(${180+t*75},${150+t*50},${255-t*100},${(1-t*.6)*.6})`;
+          ctx.beginPath();ctx.arc(x+(Math.random()-.5)*sp,y+(Math.random()-.5)*sp,1+t*1.2,0,Math.PI*2);ctx.fill();
+        }
+      }
+    }
+    const cg=ctx.createRadialGradient(cx,cy,0,cx,cy,w*.08);
+    cg.addColorStop(0,'rgba(255,240,180,0.85)');cg.addColorStop(1,'rgba(180,100,255,0)');
+    ctx.fillStyle=cg;ctx.beginPath();ctx.arc(cx,cy,w*.08,0,Math.PI*2);ctx.fill();
+  },
+  function(ctx,w,h){// Abstract waves
+    ctx.fillStyle='#06060f';ctx.fillRect(0,0,w,h);
+    const cols=['#c9a84c','#8b5cf6','#3b82f6','#ef4444','#10b981','#f59e0b'];
+    for(let i=0;i<15;i++){
+      const x=Math.random()*w,y=Math.random()*h,r=15+Math.random()*55;
+      const g=ctx.createRadialGradient(x,y,0,x,y,r);
+      const c=cols[Math.floor(Math.random()*cols.length)];
+      g.addColorStop(0,c+'50');g.addColorStop(1,c+'00');
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
+    }
+  },
+  function(ctx,w,h){// Desert dunes
+    const g=ctx.createLinearGradient(0,0,0,h);
+    g.addColorStop(0,'#1a0c02');g.addColorStop(0.5,'#8b4513');g.addColorStop(1,'#c8861a');
+    ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+    ctx.fillStyle='rgba(255,200,100,0.15)';
+    ctx.beginPath();ctx.arc(w*.5,h*.25,w*.12,0,Math.PI*2);ctx.fill();
+    [[0,1,h*.35,'#a0521a'],[w*.2,1,h*.3,'#8b4010'],[w*.45,1,h*.4,'#c8861a'],
+     [w*.65,1,h*.28,'#a0521a'],[w*.8,1,h*.35,'#8b4010']].forEach(([x,_,ht,c])=>{
+      ctx.fillStyle=c;ctx.beginPath();ctx.moveTo(x-ht*.5,h);
+      ctx.quadraticCurveTo(x,h-ht,x+ht*.5,h);ctx.closePath();ctx.fill();
+    });
+  }
+];
+
+// ── Puzzle vars ──
+let puzzleTargetX=0, canvasW=0, canvasH=0, pieceW=0, pieceH=0;
+let currentImgData=null;
+let isVerified=false;
+
+function initPuzzle(){
+  const wrap=document.getElementById('img-wrap');
+  const mc=document.getElementById('main-canvas');
+  const pc=document.getElementById('piece-canvas');
+  const displayW=wrap.clientWidth||Math.min(420,window.innerWidth-48);
+  const ratio=0.55; // height ratio
+  canvasW=displayW; canvasH=Math.round(displayW*ratio);
+  mc.width=canvasW; mc.height=canvasH;
+  pc.width=canvasW; pc.height=canvasH;
+
+  pieceW=Math.round(canvasW*0.18);
+  pieceH=Math.round(canvasH*0.55);
+
+  const mctx=mc.getContext('2d');
+  // Pick random image
+  const imgFn=IMGS[Math.floor(Math.random()*IMGS.length)];
+
+  // Draw full image
+  const off=document.createElement('canvas');
+  off.width=canvasW;off.height=canvasH;
+  const octx=off.getContext('2d');
+  imgFn(octx,canvasW,canvasH);
+  currentImgData=off;
+
+  // Target X: random but not too close to edges
+  puzzleTargetX=Math.floor(canvasW*0.35 + Math.random()*canvasW*0.35);
+
+  // Draw main image with hole
+  drawMainWithHole(mctx);
+  // Draw piece overlay (starts at left)
+  drawPieceAt(pc.getContext('2d'),Math.round(pieceW*0.1));
+
+  // Reset slider
+  const btn=document.getElementById('slider-btn');
+  const fill=document.getElementById('slider-fill');
+  const hint=document.getElementById('slider-hint');
+  btn.style.left='4px';btn.className='slider-btn';
+  btn.textContent='⟫';fill.style.width='0%';
+  hint.style.opacity='1';
+  document.getElementById('pz-status').textContent='';
+  document.getElementById('pz-status').className='pz-status';
+  isVerified=false;
+
+  setupSlider();
 }
 
-async function doResetPass(){
-  const btn=document.getElementById('reset-btn');
-  btn.disabled=true;btn.textContent='Sending...';
-  try{
-    await auth.sendPasswordResetEmail(_forgotEmail);
-    showMsg('forgot-ok','✅ Reset link sent to '+_forgotEmail+'! Check inbox + spam.','success');
-    setTimeout(()=>switchAuthTab('login'),4000);
-  }catch(e){
-    showMsg('forgot-err',e.code==='auth/user-not-found'?'No account found.':e.message);
-    btn.disabled=false;btn.textContent='Send Reset Link →';
-  }
+function getPiecePath(ctx,x,y,w,h){
+  const r=Math.min(w,h)*0.12; // tab radius
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  // Top: with bump up
+  ctx.lineTo(x+w*.4,y);
+  ctx.arc(x+w*.5,y-r,r,Math.PI*0,Math.PI,true);
+  ctx.lineTo(x+w-r,y);
+  ctx.arcTo(x+w,y,x+w,y+r,r);
+  // Right
+  ctx.lineTo(x+w,y+h*.4);
+  ctx.arc(x+w+r,y+h*.5,r,Math.PI,0,false);
+  ctx.lineTo(x+w,y+h-r);
+  ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+  // Bottom
+  ctx.lineTo(x+w*.6,y+h);
+  ctx.arc(x+w*.5,y+h+r,r,0,Math.PI,false);
+  ctx.lineTo(x+r,y+h);
+  ctx.arcTo(x,y+h,x,y+h-r,r);
+  // Left
+  ctx.lineTo(x,y+r);
+  ctx.arcTo(x,y,x+r,y,r);
+  ctx.closePath();
 }
 
-// ── UI ────────────────────────────────────────────────────────
-window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>20);});
-function toggleMobileNav(){document.getElementById('mobile-nav').classList.toggle('open');}
-function goProducts(cat){window.location.href=`/products?cat=${cat}`;}
-function openAuth(tab){document.getElementById('auth-overlay').classList.add('open');document.body.style.overflow='hidden';switchAuthTab(tab||'login');}
-function closeAuthPanel(){document.getElementById('auth-overlay').classList.remove('open');document.body.style.overflow='';}
-document.getElementById('auth-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('auth-overlay'))closeAuthPanel();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAuthPanel();});
-function switchAuthTab(tab){
-  document.querySelectorAll('.auth-form').forEach(f=>f.classList.remove('active'));
-  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
-  const form=document.getElementById('form-'+tab);
-  if(form)form.classList.add('active');
-  if(tab==='login')document.querySelectorAll('.auth-tab')[0].classList.add('active');
-  if(tab==='register')document.querySelectorAll('.auth-tab')[1].classList.add('active');
-  if(tab==='forgot'){
-    document.getElementById('fs1').classList.add('active');
-    document.getElementById('fs2').classList.remove('active');
-    document.getElementById('sd1').classList.add('done');
-    document.getElementById('sd2').classList.remove('done');
-  }
-  document.getElementById('auth-tabs').style.display=tab==='forgot'?'none':'flex';
-  ['login-err','reg-err','reg-ok','forgot-err','forgot-ok'].forEach(hideMsg);
+function drawMainWithHole(ctx){
+  ctx.drawImage(currentImgData,0,0);
+  // Darken a bit
+  ctx.fillStyle='rgba(0,0,0,0.2)';ctx.fillRect(0,0,canvasW,canvasH);
+  // Cut hole at target position
+  const py=Math.round((canvasH-pieceH)/2);
+  ctx.save();
+  getPiecePath(ctx,puzzleTargetX,py,pieceW,pieceH);
+  ctx.clip();
+  // Dark hole
+  ctx.fillStyle='rgba(0,0,0,0.7)';ctx.fillRect(0,0,canvasW,canvasH);
+  // Highlight edge
+  ctx.restore();
+  ctx.save();
+  getPiecePath(ctx,puzzleTargetX,py,pieceW,pieceH);
+  ctx.strokeStyle='rgba(255,255,255,0.35)';ctx.lineWidth=1.5;ctx.stroke();
+  ctx.restore();
 }
-function openTG(){window.open(siteSettings.tg||'https://t.me/adtgroups','_blank');}
-function openHelp(){window.location.href='/support';}
-window.addEventListener('load',()=>initDraggable('float-widget'));
+
+function drawPieceAt(ctx,x){
+  ctx.clearRect(0,0,canvasW,canvasH);
+  const py=Math.round((canvasH-pieceH)/2);
+  ctx.save();
+  getPiecePath(ctx,x,py,pieceW,pieceH);
+  ctx.clip();
+  // Draw image portion from target position
+  ctx.drawImage(currentImgData,puzzleTargetX,py,pieceW,pieceH,x,py,pieceW,pieceH);
+  ctx.restore();
+  // Border
+  ctx.save();
+  getPiecePath(ctx,x,py,pieceW,pieceH);
+  ctx.strokeStyle='rgba(201,168,76,0.7)';ctx.lineWidth=1.5;ctx.stroke();
+  ctx.restore();
+  // Shadow
+  ctx.save();
+  ctx.shadowColor='rgba(0,0,0,0.5)';ctx.shadowBlur=6;ctx.shadowOffsetX=2;ctx.shadowOffsetY=2;
+  getPiecePath(ctx,x,py,pieceW,pieceH);
+  ctx.strokeStyle='rgba(0,0,0,0.3)';ctx.lineWidth=2;ctx.stroke();
+  ctx.restore();
+}
+
+function setupSlider(){
+  const track=document.getElementById('slider-track');
+  const btn=document.getElementById('slider-btn');
+  const fill=document.getElementById('slider-fill');
+  const hint=document.getElementById('slider-hint');
+  const pc=document.getElementById('piece-canvas');
+  const pctx=pc.getContext('2d');
+
+  let isDragging=false;
+  let startX=0, startBtnX=0;
+  const btnW=42, trackPad=4;
+
+  function getTrackW(){return track.getBoundingClientRect().width;}
+
+  function onMove(clientX){
+    if(!isDragging||isVerified)return;
+    const trackW=getTrackW();
+    const maxLeft=trackW-btnW-trackPad*2;
+    let newLeft=startBtnX+(clientX-startX);
+    newLeft=Math.max(0,Math.min(maxLeft,newLeft));
+    btn.style.left=(newLeft+trackPad)+'px';
+    const pct=newLeft/maxLeft;
+    fill.style.width=(pct*100)+'%';
+    hint.style.opacity=pct>0.05?'0':'1';
+    // Move piece across canvas
+    const pieceX=Math.round(pieceW*0.1+pct*(canvasW-pieceW*1.2));
+    drawPieceAt(pctx,pieceX);
+  }
+
+  function onEnd(){
+    if(!isDragging||isVerified)return;
+    isDragging=false;
+    const trackW=getTrackW();
+    const maxLeft=trackW-btnW-trackPad*2;
+    const curLeft=parseFloat(btn.style.left||trackPad)-trackPad;
+    const pct=Math.max(0,curLeft/maxLeft);
+    const pieceX=Math.round(pieceW*0.1+pct*(canvasW-pieceW*1.2));
+    checkAnswer(pieceX);
+  }
+
+  btn.onmousedown=e=>{
+    if(isVerified)return;
+    isDragging=true;
+    startX=e.clientX;
+    startBtnX=parseFloat(btn.style.left||trackPad)-trackPad;
+    e.preventDefault();
+  };
+  document.onmousemove=e=>onMove(e.clientX);
+  document.onmouseup=onEnd;
+
+  btn.ontouchstart=e=>{
+    if(isVerified)return;
+    isDragging=true;
+    startX=e.touches[0].clientX;
+    startBtnX=parseFloat(btn.style.left||trackPad)-trackPad;
+    e.preventDefault();
+  },{passive:false};
+  btn.addEventListener('touchstart',e=>{
+    if(isVerified)return;
+    isDragging=true;
+    startX=e.touches[0].clientX;
+    startBtnX=parseFloat(btn.style.left||trackPad)-trackPad;
+    e.preventDefault();
+  },{passive:false});
+  document.addEventListener('touchmove',e=>{if(isDragging)onMove(e.touches[0].clientX);},{passive:true});
+  document.addEventListener('touchend',onEnd,{passive:true});
+}
+
+function checkAnswer(pieceX){
+  if(isVerified)return;
+  const diff=Math.abs(pieceX-puzzleTargetX);
+  const btn=document.getElementById('slider-btn');
+  const st=document.getElementById('pz-status');
+  if(diff<=TOLERANCE){
+    // Correct!
+    isVerified=true;
+    btn.classList.add('ok');btn.textContent='✓';
+    st.textContent='✓ Verification successful!';st.className='pz-status ok';
+    stepDone(1);stepAct(2);stepDone(2);
+    setTimeout(()=>{
+      document.getElementById('step-puzzle').style.display='none';
+      document.getElementById('step-success').style.display='flex';
+      const token=saveToken();
+      setTimeout(()=>{
+        const dest = REDIRECT.includes('?') ? REDIRECT+'&adt_v='+encodeURIComponent(token) : REDIRECT+'?adt_v='+encodeURIComponent(token);
+      window.location.href=dest;
+      },2600);
+    },700);
+  } else {
+    // Wrong — shake and reset
+    btn.classList.add('err');btn.textContent='✗';
+    st.textContent='✗ Not quite right — try again';st.className='pz-status err';
+    setTimeout(()=>{
+      btn.classList.remove('err');btn.textContent='⟫';
+      btn.style.left='4px';
+      document.getElementById('slider-fill').style.width='0%';
+      document.getElementById('slider-hint').style.opacity='1';
+      const pc=document.getElementById('piece-canvas');
+      drawPieceAt(pc.getContext('2d'),Math.round(pieceW*0.1));
+      st.textContent='';st.className='pz-status';
+    },900);
+  }
+}
 </script>
 </body>
-      </html>
+</html>
