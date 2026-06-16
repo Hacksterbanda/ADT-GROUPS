@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+/* ADT Gate Check */
+(function(){
+  var K='adt_sec_v1';
+  var p=new URLSearchParams(window.location.search);
+  var tk=p.get('adt_v');
+  if(tk){localStorage.setItem(K,JSON.stringify({v:tk,exp:Date.now()+7*86400000}));window.history.replaceState({},'',window.location.pathname);}
+  try{var t=JSON.parse(localStorage.getItem(K));if(t&&Date.now()<t.exp)return;localStorage.removeItem(K);}catch(e){}
+  window.location.replace('/?from='+encodeURIComponent(window.location.pathname+window.location.search));
+})();
+</script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Dashboard — ADT GROUPS</title>
+<link rel="stylesheet" href="style_sn4t7.css"/>
+<style>
+.app{display:flex;min-height:100vh;}
+.main{margin-left:230px;flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.content{padding:24px;flex:1;}
+.tab-section{display:none;}
+.tab-section.active{display:block;animation:tab-fade 0.32s ease both;}
+@keyframes tab-fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.greeting-hi{font-family:var(--font-display);font-size:28px;font-weight:800;margin-bottom:4px;background:linear-gradient(135deg,var(--text) 30%,var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.greeting-sub{font-size:13px;color:var(--text3);margin-bottom:22px;}
+.action-row{display:flex;gap:10px;margin-bottom:26px;flex-wrap:wrap;}
+.dep-step-title{font-family:var(--font-display);font-size:20px;font-weight:700;margin-bottom:4px;}
+.dep-step-sub{font-size:13px;color:var(--text2);margin-bottom:20px;}
+.with-balance{background:linear-gradient(135deg,rgba(201,168,76,0.1),rgba(201,168,76,0.03));border:1px solid rgba(201,168,76,0.25);border-radius:16px;padding:20px 22px;margin-bottom:18px;position:relative;overflow:hidden;}
+.with-balance::after{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(201,168,76,0.12),transparent 70%);pointer-events:none;}
+.with-balance-label{font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px;font-weight:700;}
+.with-balance-val{font-family:var(--font-display);font-size:34px;font-weight:800;color:var(--green2);letter-spacing:-1px;}
+.my-prods-grid{display:flex;flex-direction:column;gap:14px;}
+.ref-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:22px;margin-bottom:14px;}
+.ref-code-box{background:var(--dark);border:1px solid var(--gold-dim);border-radius:10px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:10px;}
+.ref-code-val{font-family:var(--font-mono);font-size:18px;font-weight:700;color:var(--gold2);letter-spacing:2px;}
+.ref-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;}
+.ref-stat{background:var(--dark);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;}
+.ref-stat-val{font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--gold2);}
+.ref-stat-lbl{font-size:10px;color:var(--text3);margin-top:3px;}
+
+/* CATEGORY CARDS in dashboard */
+.browse-cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;}
+.browse-cat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;cursor:pointer;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);}
+.browse-cat-card:hover{transform:translateY(-5px);border-color:var(--gold);box-shadow:0 16px 40px rgba(0,0,0,0.5),0 0 0 1px rgba(201,168,76,0.15);}
+.browse-cat-img{height:120px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.browse-cat-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform 0.5s;}
+.browse-cat-card:hover .browse-cat-bg{transform:scale(1.07);}
+.browse-cat-overlay{position:absolute;inset:0;}
+.browse-cat-icon{position:relative;z-index:2;font-size:36px;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.6));}
+.browse-cat-body{padding:14px 16px;}
+.browse-cat-name{font-family:var(--font-display);font-size:16px;font-weight:700;margin-bottom:4px;}
+.browse-cat-desc{font-size:11px;color:var(--text2);line-height:1.5;}
+
+/* BAL CARD UPGRADES */
+.bal-card{position:relative;overflow:hidden;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);}
+.bal-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,0.5);}
+.bal-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.3s;pointer-events:none;}
+.bal-card.gold::before{background:linear-gradient(135deg,rgba(201,168,76,0.07),transparent);}
+.bal-card.green::before{background:linear-gradient(135deg,rgba(29,185,84,0.07),transparent);}
+.bal-card.blue::before{background:linear-gradient(135deg,rgba(59,130,246,0.07),transparent);}
+.bal-card.purple::before{background:linear-gradient(135deg,rgba(168,85,247,0.07),transparent);}
+.bal-card:hover::before{opacity:1;}
+@keyframes gold-pulse{0%,100%{text-shadow:0 0 20px rgba(201,168,76,0.25)}50%{text-shadow:0 0 35px rgba(201,168,76,0.5)}}
+.bal-amount.gold{animation:gold-pulse 3s ease-in-out infinite;}
+
+/* AMOUNT BOX HOVER */
+.amount-box{transition:all 0.22s cubic-bezier(0.4,0,0.2,1);}
+.amount-box:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.4);}
+.amount-box.selected{animation:pop-in 0.28s cubic-bezier(0.34,1.56,0.64,1) both;}
+@keyframes pop-in{0%{transform:scale(0.94)}100%{transform:scale(1)}}
+
+/* FLOAT PULSE */
+.float-tg{animation:tg-pulse 3s ease-in-out infinite;}
+@keyframes tg-pulse{0%,100%{box-shadow:0 4px 20px rgba(0,136,204,0.4)}50%{box-shadow:0 4px 28px rgba(0,136,204,0.7)}}
+
+/* WITHDRAW UPGRADE */
+.with-limit-bar{background:var(--dark);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:20px;}
+.with-form-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;}
+
+/* DEPOSIT MODAL */
+.dep-modal-overlay{position:fixed;inset:0;z-index:800;background:rgba(0,0,0,0.88);backdrop-filter:blur(16px);display:none;align-items:center;justify-content:center;padding:20px;}
+.dep-modal-overlay.open{display:flex;}
+.dep-modal{background:var(--card);border:1px solid var(--border2);border-radius:var(--r-xl);width:100%;max-width:500px;box-shadow:var(--shadow-lg);animation:modal-in 0.3s cubic-bezier(0.34,1.56,0.64,1);max-height:92vh;overflow-y:auto;}
+.dep-modal-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.dep-modal-title{font-family:var(--font-display);font-size:20px;font-weight:700;}
+.dep-modal-body{padding:24px;}
+.dep-modal-close{width:32px;height:32px;border-radius:50%;background:var(--card2);border:1px solid var(--border);color:var(--text2);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;}
+.dep-modal-close:hover{background:var(--red-dim);color:var(--red2);}
+
+/* PAYMENT METHOD SELECTOR */
+.pay-method-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;}
+.pay-method-card{background:var(--dark);border:2px solid var(--border);border-radius:var(--r-lg);padding:20px;cursor:pointer;transition:all 0.22s;text-align:center;position:relative;}
+.pay-method-card:hover{border-color:var(--gold);background:var(--gold-dim);}
+.pay-method-card.selected{border-color:var(--gold);background:var(--gold-dim);box-shadow:0 0 0 3px var(--gold-glow);}
+.pay-method-icon{font-size:32px;margin-bottom:10px;}
+.pay-method-name{font-family:var(--font-display);font-size:15px;font-weight:700;margin-bottom:4px;}
+.pay-method-desc{font-size:11px;color:var(--text2);line-height:1.4;}
+.trending-tag{position:absolute;top:10px;right:10px;}
+
+/* PAYMENT DETAIL VIEWS */
+.pay-view{display:none;}
+.pay-view.active{display:block;}
+.pay-timer-wrap{text-align:center;margin-bottom:18px;}
+.pay-upi-box{background:var(--dark);border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px;}
+.pay-upi-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:2px;}
+.pay-upi-val{font-family:var(--font-mono);font-size:14px;color:var(--gold2);word-break:break-all;}
+.pay-amount-pill{display:inline-flex;align-items:center;background:var(--gold-dim);border:1px solid rgba(201,168,76,0.3);border-radius:100px;padding:5px 16px;font-family:var(--font-display);font-size:17px;font-weight:700;color:var(--gold2);margin-bottom:16px;}
+.qr-load-btn{width:140px;height:140px;border:2px dashed var(--border2);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;background:var(--dark);transition:all 0.2s;margin:0 auto;}
+.qr-load-btn:hover{border-color:var(--gold);background:var(--gold-dim);}
+.qr-load-btn-icon{font-size:32px;}
+.qr-load-btn-text{font-size:12px;color:var(--text2);font-weight:600;}
+.qr-img-wrap{width:160px;height:160px;border-radius:12px;overflow:hidden;background:#fff;margin:0 auto;display:flex;align-items:center;justify-content:center;}
+.qr-img-wrap img{width:100%;height:100%;object-fit:contain;}
+.utr-section{border-top:1px solid var(--border);padding-top:16px;margin-top:16px;}
+
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .sidebar-overlay.open{display:block;}
+  .main{margin-left:0;}
+  .content{padding:16px;}
+  .hamburger{display:flex;}
+  .balance-grid{grid-template-columns:1fr 1fr;}
+  .action-row .btn{flex:1;}
+  .browse-cat-grid{grid-template-columns:1fr;}
+  .pay-method-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:420px){
+  .balance-grid{grid-template-columns:1fr;}
+  .ref-stats{grid-template-columns:1fr 1fr;}
+  .pay-method-grid{grid-template-columns:1fr;}
+}
+
+/* PROFILE POPUP */
+.profile-overlay{position:fixed;inset:0;z-index:700;background:rgba(0,0,0,0.82);backdrop-filter:blur(18px);display:none;align-items:flex-end;justify-content:center;padding:0;}
+.profile-overlay.open{display:flex;}
+.profile-popup{background:var(--card);border:1px solid var(--border2);border-radius:var(--r-xl) var(--r-xl) 0 0;width:100%;max-width:420px;padding:0 0 24px;box-shadow:var(--shadow-lg);animation:slide-up 0.32s cubic-bezier(0.34,1.56,0.64,1);}
+@keyframes slide-up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.profile-drag{width:40px;height:4px;background:var(--border2);border-radius:2px;margin:12px auto 0;}
+.profile-header{display:flex;align-items:center;gap:14px;padding:20px 24px 16px;}
+.profile-av-lg{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:22px;color:#000;flex-shrink:0;border:2px solid rgba(201,168,76,0.4);}
+.profile-info{flex:1;overflow:hidden;}
+.profile-name{font-family:var(--font-display);font-size:19px;font-weight:700;margin-bottom:2px;}
+.profile-email{font-size:12px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.profile-close{width:32px;height:32px;border-radius:50%;background:var(--card2);border:1px solid var(--border);color:var(--text2);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;}
+.profile-close:hover{background:var(--red-dim);color:var(--red2);}
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 24px 16px;}
+.profile-stat{background:var(--dark);border:1px solid var(--border);border-radius:11px;padding:11px 10px;text-align:center;}
+.profile-stat-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;}
+.profile-stat-val{font-family:var(--font-display);font-size:15px;font-weight:700;}
+.profile-ref{display:flex;align-items:center;justify-content:space-between;margin:0 24px 16px;background:var(--dark);border:1px solid var(--gold-dim);border-radius:11px;padding:11px 14px;}
+.profile-ref-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:3px;}
+.profile-ref-code{font-family:var(--font-mono);font-size:14px;font-weight:700;color:var(--gold2);letter-spacing:2px;}
+.profile-divider{height:1px;background:var(--border);margin:0 24px 16px;}
+.profile-logout{display:flex;align-items:center;gap:10px;width:calc(100% - 48px);margin:0 24px;padding:13px 16px;background:var(--red-dim);border:1px solid rgba(239,68,68,0.2);border-radius:11px;color:var(--red2);font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:var(--font-body);}
+.profile-logout:hover{background:rgba(239,68,68,0.18);}
+
+/* TAGS — no emoji, clean */
+.tag-trending{background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;font-size:10px;padding:2px 9px;border-radius:100px;font-weight:700;font-family:var(--font-mono);letter-spacing:0.3px;}
+.tag-best{background:linear-gradient(135deg,var(--gold),#a07828);color:#000;font-size:10px;padding:2px 9px;border-radius:100px;font-weight:700;font-family:var(--font-mono);letter-spacing:0.3px;}
+.tag-hot{background:linear-gradient(135deg,#f97316,#dc2626);color:#fff;font-size:10px;padding:2px 9px;border-radius:100px;font-weight:700;font-family:var(--font-mono);letter-spacing:0.3px;}
+.tag-new{background:linear-gradient(135deg,var(--green),#16a34a);color:#fff;font-size:10px;padding:2px 9px;border-radius:100px;font-weight:700;font-family:var(--font-mono);letter-spacing:0.3px;}
+</style>
+</head>
+<body>
+<div class="noise"></div>
+<div class="sidebar-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
+<div id="splash"><div class="splash-logo"><svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#c9a84c" stroke-width="1.5" stroke-linejoin="round" fill="none"/><path d="M2 17L12 22L22 17" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12L12 17L22 12" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="splash-name">ADT GROUPS</div><div class="splash-tag">Loading Dashboard</div><div class="splash-spinner"></div></div>
+
+<div class="app">
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-wrap" onclick="window.location.href='/home'">
+      <div class="logo-mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#c9a84c" stroke-width="1.5" stroke-linejoin="round" fill="none"/><path d="M2 17L12 22L22 17" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12L12 17L22 12" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div><div class="logo-name" style="font-size:15px;">ADT GROUPS</div><div class="logo-tag">My Account</div></div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-item active" onclick="showTab('overview',this)"><span class="nav-icon">◈</span><span>Dashboard</span></div>
+    <div class="nav-item" onclick="openDepositModal()"><span class="nav-icon">↓</span><span>Deposit Funds</span></div>
+    <div class="nav-item" onclick="showTab('withdraw',this)"><span class="nav-icon">↑</span><span>Withdraw Funds</span></div>
+    <div class="nav-item" onclick="showTab('browse',this)"><span class="nav-icon">◎</span><span>Browse Products</span></div>
+    <div class="nav-item" onclick="showTab('myproducts',this)"><span class="nav-icon">▣</span><span>My Products</span></div>
+    <div class="nav-item" onclick="showTab('dep-history',this)"><span class="nav-icon">≡</span><span>Deposit History</span></div>
+    <div class="nav-item" onclick="showTab('with-history',this)"><span class="nav-icon">≡</span><span>Withdrawal History</span></div>
+    <div class="nav-item" onclick="showTab('referral',this)"><span class="nav-icon">◉</span><span>Referral</span></div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="lang-switcher" style="margin-bottom:10px;justify-content:center;">
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="hinglish" onclick="setLang('hinglish')">HIN</button>
+      <button class="lang-btn" data-lang="hindi" onclick="setLang('hindi')">हिं</button>
+    </div>
+    <div class="user-pill">
+      <div class="user-av" id="sb-av">U</div>
+      <div style="overflow:hidden;">
+        <div class="user-name-txt" id="sb-name">Loading...</div>
+        <div class="user-role-txt"><span class="status-dot green"></span> Verified Investor</div>
+      </div>
+    </div>
+    <button class="btn-logout" onclick="doLogout()">Logout</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="hamburger" onclick="openSidebar()">☰</div>
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="font-size:11px;color:var(--text3);font-family:var(--font-mono);" id="topbar-date"></div>
+      <!-- Profile button - topbar right -->
+      <div onclick="openProfilePopup()" style="display:flex;align-items:center;gap:8px;cursor:pointer;background:var(--card);border:1px solid var(--border);border-radius:100px;padding:5px 12px 5px 5px;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:#000;flex-shrink:0;" id="topbar-av">U</div>
+        <span style="font-size:12px;font-weight:600;color:var(--text);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="topbar-name">Account</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- OVERVIEW -->
+    <section class="tab-section active" id="tab-overview">
+      <div class="greeting-hi anim-1">Welcome back, <span id="greet-name">Investor</span> 👋</div>
+      <div class="greeting-sub anim-1">Here's your live investment portfolio overview.</div>
+      <div class="balance-grid anim-2">
+        <div class="bal-card gold"><div class="bal-icon">◈</div><div class="bal-label">Available Balance</div><div class="bal-amount gold" id="d-balance">₹0</div><div class="bal-change"><span onclick="openDepositModal()" style="cursor:pointer;color:var(--gold2);font-size:12px;">+ Add Funds →</span></div></div>
+        <div class="bal-card blue"><div class="bal-icon">◎</div><div class="bal-label">Portfolio Value</div><div class="bal-amount blue" id="d-portfolio">₹0</div></div>
+        <div class="bal-card green"><div class="bal-icon">▲</div><div class="bal-label">Total Returns</div><div class="bal-amount green" id="d-returns">₹0</div></div>
+        <div class="bal-card purple"><div class="bal-icon">◆</div><div class="bal-label">Total Invested</div><div class="bal-amount white" id="d-invested">₹0</div></div>
+      </div>
+      <div class="action-row anim-3">
+        <button class="btn btn-green btn-lg" onclick="openDepositModal()">⬇ Deposit</button>
+        <button class="btn btn-gold btn-lg" onclick="showTab('withdraw',null)">⬆ Withdraw</button>
+        <button class="btn btn-ghost btn-lg" onclick="showTab('browse',null)">◎ Browse Products</button>
+      </div>
+      <div style="font-family:var(--font-display);font-size:18px;font-weight:800;margin-bottom:14px;background:linear-gradient(135deg,var(--text),var(--text2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" class="anim-4">My Active Products</div>
+      <div id="overview-products" class="anim-5"><div class="loader"><div class="spinner"></div></div></div>
+    </section>
+
+    <!-- BROWSE PRODUCTS -->
+    <section class="tab-section" id="tab-browse">
+      <div class="dep-step-title">Browse Products</div>
+      <div class="dep-step-sub">Select a category to explore investment opportunities.</div>
+      <!-- Category cards — loaded from Firebase -->
+      <div class="browse-cat-grid" id="browse-cat-grid">
+        <div class="browse-cat-card" onclick="window.location.href='/products?cat=farming'">
+          <div class="browse-cat-img">
+            <div class="browse-cat-bg" id="bcat-img-farming" style="background-image:url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&q=70')"></div>
+            <div class="browse-cat-overlay" style="background:linear-gradient(180deg,rgba(0,0,0,0.1),rgba(6,30,12,0.7))"></div>
+            <div class="browse-cat-icon">🌾</div>
+          </div>
+          <div class="browse-cat-body">
+            <div class="browse-cat-name" id="bcat-name-farming">Agriculture</div>
+            <div class="browse-cat-desc" id="bcat-desc-farming">Sustainable farming & organic agriculture projects.</div>
+          </div>
+        </div>
+        <div class="browse-cat-card" onclick="window.location.href='/products?cat=realestate'">
+          <div class="browse-cat-img">
+            <div class="browse-cat-bg" id="bcat-img-realestate" style="background-image:url('https://images.unsplash.com/photo-1486325212027-8081e485255e?w=400&q=70')"></div>
+            <div class="browse-cat-overlay" style="background:linear-gradient(180deg,rgba(0,0,0,0.1),rgba(30,20,0,0.7))"></div>
+            <div class="browse-cat-icon">🏛️</div>
+          </div>
+          <div class="browse-cat-body">
+            <div class="browse-cat-name" id="bcat-name-realestate">Real Estate</div>
+            <div class="browse-cat-desc" id="bcat-desc-realestate">Premium residential & commercial projects.</div>
+          </div>
+        </div>
+        <div class="browse-cat-card" onclick="window.location.href='/products?cat=business'">
+          <div class="browse-cat-img">
+            <div class="browse-cat-bg" id="bcat-img-business" style="background-image:url('https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=400&q=70')"></div>
+            <div class="browse-cat-overlay" style="background:linear-gradient(180deg,rgba(0,0,0,0.1),rgba(0,10,40,0.7))"></div>
+            <div class="browse-cat-icon">💼</div>
+          </div>
+          <div class="browse-cat-body">
+            <div class="browse-cat-name" id="bcat-name-business">Business</div>
+            <div class="browse-cat-desc" id="bcat-desc-business">Innovative businesses & high-growth startups.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WITHDRAW -->
+    <section class="tab-section" id="tab-withdraw">
+      <div class="dep-step-title">⬆ Withdraw Funds</div>
+      <div class="dep-step-sub">Your earnings, your choice — withdraw anytime!</div>
+
+      <!-- Balance card -->
+      <div class="with-balance anim-1">
+        <div class="with-balance-label">💰 Available to Withdraw</div>
+        <div class="with-balance-val" id="with-returnable">₹0</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:5px;font-family:var(--font-mono);" id="with-min-note">Minimum withdrawal: loading...</div>
+      </div>
+      <div id="with-bal-display" style="display:none;">₹0</div>
+
+      <!-- Daily limit bar -->
+      <div class="with-limit-bar anim-2">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-size:12px;color:var(--text2);font-weight:600;">Daily Withdrawals</span>
+          <span id="with-count-badge" style="font-family:var(--font-mono);font-size:13px;font-weight:700;color:var(--gold2);">0 / 3</span>
+        </div>
+        <div class="progress-bar" style="height:6px;"><div class="progress-fill" id="with-count-fill" style="width:0%;background:linear-gradient(90deg,var(--green),var(--gold));"></div></div>
+        <div id="with-limit-note" style="font-size:11px;color:var(--text3);margin-top:6px;">3 withdrawals allowed per day. Resets at midnight.</div>
+      </div>
+
+      <!-- Saved Accounts -->
+      <div class="with-form-card anim-3" id="saved-accounts-section">
+        <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;">🏦 Saved Payout Accounts</div>
+
+        <!-- UPI Account -->
+        <div id="upi-account-wrap">
+          <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;">UPI Account</div>
+          <div id="upi-saved-display" style="display:none;background:var(--dark);border:1px solid rgba(29,185,84,0.2);border-radius:12px;padding:14px;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div style="font-size:10px;color:var(--text3);margin-bottom:3px;">UPI ID</div>
+                <div style="font-family:var(--font-mono);font-size:14px;color:var(--green2);font-weight:700;" id="upi-saved-val">—</div>
+              </div>
+              <span style="font-size:18px;">✅</span>
+            </div>
+          </div>
+          <div id="upi-add-wrap">
+            <input class="form-input" id="with-upi" type="text" placeholder="yourname@upi" style="margin-bottom:8px;">
+            <button class="btn btn-ghost btn-full" style="font-size:13px;" onclick="saveUPIAccount()">Save UPI Account →</button>
+          </div>
+        </div>
+
+        <div style="height:1px;background:var(--border);margin:16px 0;"></div>
+
+        <!-- Bank Account -->
+        <div id="bank-account-wrap">
+          <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;">Bank Account</div>
+          <div id="bank-saved-display" style="display:none;background:var(--dark);border:1px solid rgba(59,130,246,0.2);border-radius:12px;padding:14px;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div style="font-size:10px;color:var(--text3);margin-bottom:3px;">Account No.</div>
+                <div style="font-family:var(--font-mono);font-size:14px;color:var(--blue2);font-weight:700;" id="bank-saved-val">—</div>
+                <div style="font-size:11px;color:var(--text3);margin-top:2px;" id="bank-saved-ifsc">—</div>
+              </div>
+              <span style="font-size:18px;">✅</span>
+            </div>
+          </div>
+          <div id="bank-add-wrap">
+            <input class="form-input" id="with-bank" type="text" placeholder="Account Number" style="margin-bottom:8px;">
+            <input class="form-input" id="with-ifsc" type="text" placeholder="IFSC Code (e.g. SBIN0001234)" style="margin-bottom:8px;">
+            <button class="btn btn-ghost btn-full" style="font-size:13px;" onclick="saveBankAccount()">Save Bank Account →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Withdraw Form -->
+      <div class="with-form-card anim-4">
+        <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:18px;">📋 Withdraw Amount</div>
+        <div class="msg-error" id="with-err"></div>
+        <div class="msg-success" id="with-ok"></div>
+        <div class="form-group">
+          <label class="form-label">Amount (₹)</label>
+          <input class="form-input" id="with-amount" type="number" placeholder="Enter amount">
+          <div class="form-hint" id="with-amount-hint">Loading...</div>
+        </div>
+        <!-- Payout method selector -->
+        <div class="form-group">
+          <label class="form-label">Payout To</label>
+          <select class="form-input" id="with-method">
+            <option value="">— Select saved account —</option>
+            <option value="upi" id="with-opt-upi" disabled>UPI (not set)</option>
+            <option value="bank" id="with-opt-bank" disabled>Bank Account (not set)</option>
+          </select>
+        </div>
+        <button id="with-submit-btn" class="btn btn-gold btn-full btn-lg" onclick="submitWithdraw()">Withdraw Now →</button>
+      </div>
+    </section>
+
+    <!-- MY PRODUCTS -->
+    <section class="tab-section" id="tab-myproducts">
+      <div class="dep-step-title" style="margin-bottom:4px;">My Products</div>
+      <div class="dep-step-sub">Claim your daily earnings. Don't miss a day!</div>
+      <div class="claim-miss-note" style="margin-bottom:18px;">Missed claims cannot be recovered. Claim daily at the same time each day.</div>
+      <div class="my-prods-grid" id="my-prods-list"><div class="loader"><div class="spinner"></div></div></div>
+    </section>
+
+    <!-- DEPOSIT HISTORY -->
+    <section class="tab-section" id="tab-dep-history">
+      <div class="dep-step-title" style="margin-bottom:16px;">Deposit History</div>
+      <div class="sec-card"><div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Txn ID</th><th>Amount</th><th>UTR</th><th>Date</th><th>Status</th></tr></thead>
+          <tbody id="dep-hist-body"><tr><td colspan="5" style="text-align:center;padding:30px;color:var(--text3);">Loading...</td></tr></tbody>
+        </table>
+      </div></div>
+    </section>
+
+    <!-- WITHDRAWAL HISTORY -->
+    <section class="tab-section" id="tab-with-history">
+      <div class="dep-step-title" style="margin-bottom:16px;">Withdrawal History</div>
+      <div class="sec-card"><div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Txn ID</th><th>Amount</th><th>Account</th><th>Date</th><th>Status</th></tr></thead>
+          <tbody id="with-hist-body"><tr><td colspan="5" style="text-align:center;padding:30px;color:var(--text3);">Loading...</td></tr></tbody>
+        </table>
+      </div></div>
+    </section>
+
+    <!-- REFERRAL -->
+    <section class="tab-section" id="tab-referral">
+      <div class="dep-step-title" style="margin-bottom:4px;">Referral Program</div>
+      <div class="dep-step-sub" id="ref-note-text">Earn rewards for every friend who joins and deposits!</div>
+      <div class="ref-card">
+        <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px;">Your Referral Code</div>
+        <div class="ref-code-box">
+          <div class="ref-code-val" id="ref-code-val">—</div>
+          <button class="copy-btn" onclick="copyText(document.getElementById('ref-code-val').textContent,this)">Copy Code</button>
+        </div>
+        <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px;">Your Referral Link</div>
+        <div class="ref-code-box" style="flex-direction:column;align-items:flex-start;gap:8px;">
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--text2);word-break:break-all;" id="ref-link-val">—</div>
+          <button class="copy-btn" onclick="copyText(document.getElementById('ref-link-val').textContent,this)">Copy Link</button>
+        </div>
+        <div class="ref-stats">
+          <div class="ref-stat"><div class="ref-stat-val" id="ref-count">0</div><div class="ref-stat-lbl">Referred</div></div>
+          <div class="ref-stat"><div class="ref-stat-val" style="color:var(--green2);" id="ref-earned">₹0</div><div class="ref-stat-lbl">Earned</div></div>
+          <div class="ref-stat"><div class="ref-stat-val" style="color:var(--gold2);" id="ref-pending">₹0</div><div class="ref-stat-lbl">Pending</div></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+</div>
+
+
+<!-- PROFILE POPUP -->
+<div class="profile-overlay" id="profile-overlay" onclick="closeProfileOnOverlay(event)">
+  <div class="profile-popup">
+    <div class="profile-drag"></div>
+    <div class="profile-header">
+      <div class="profile-av-lg" id="prof-av">U</div>
+      <div class="profile-info">
+        <div class="profile-name" id="prof-name">Loading...</div>
+        <div class="profile-email" id="prof-email">—</div>
+        <div style="margin-top:4px;"><span class="badge badge-green" style="font-size:10px;"><span class="status-dot green"></span> Verified Investor</span></div>
+      </div>
+      <button class="profile-close" onclick="closeProfilePopup()">✕</button>
+    </div>
+    <div class="profile-stats">
+      <div class="profile-stat">
+        <div class="profile-stat-lbl">Balance</div>
+        <div class="profile-stat-val" style="color:var(--gold2);" id="prof-bal">₹0</div>
+      </div>
+      <div class="profile-stat">
+        <div class="profile-stat-lbl">Invested</div>
+        <div class="profile-stat-val" style="color:var(--blue2);" id="prof-inv">₹0</div>
+      </div>
+      <div class="profile-stat">
+        <div class="profile-stat-lbl">Returns</div>
+        <div class="profile-stat-val" style="color:var(--green2);" id="prof-ret">₹0</div>
+      </div>
+    </div>
+    <div class="profile-ref">
+      <div>
+        <div class="profile-ref-lbl">Referral Code</div>
+        <div class="profile-ref-code" id="prof-ref">—</div>
+      </div>
+      <button class="copy-btn" onclick="copyText(document.getElementById('prof-ref').textContent,this)">Copy</button>
+    </div>
+    <div class="profile-divider"></div>
+    <button class="profile-logout" onclick="doLogout()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Logout
+    </button>
+  </div>
+</div>
+
+<!-- DEPOSIT MODAL -->
+<div class="dep-modal-overlay" id="dep-modal-overlay">
+  <div class="dep-modal">
+    <div class="dep-modal-header">
+      <div class="dep-modal-title" id="dep-modal-title">Deposit Funds</div>
+      <button class="dep-modal-close" onclick="closeDepositModal()">✕</button>
+    </div>
+    <div class="dep-modal-body">
+
+      <!-- VIEW 1: Amount Selection -->
+      <div class="pay-view active" id="pv-amount">
+        <div style="font-size:13px;color:var(--text2);margin-bottom:16px;">Select the amount you want to deposit.</div>
+        <div class="amount-grid" id="amount-boxes-grid"><div class="loader"><div class="spinner"></div></div></div>
+        <div id="custom-amount-wrap" style="display:none;margin-top:8px;">
+          <div class="form-group">
+            <label class="form-label">Custom Amount (multiples of 50)</label>
+            <input class="form-input" id="custom-amount-input" type="number" placeholder="e.g. 150, 200, 350" oninput="validateCustomInput(this)">
+            <div class="form-hint" id="custom-hint">Multiples of 50 only. e.g. 100, 150, 200...</div>
+          </div>
+        </div>
+        <div class="msg-error" id="dep-amount-err"></div>
+        <button class="btn btn-gold btn-full btn-lg" style="margin-top:8px;" onclick="goToMethodSelect()">Continue →</button>
+      </div>
+
+      <!-- VIEW 2: Method Selection -->
+      <div class="pay-view" id="pv-method">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+          <button onclick="goToAmountSelect()" style="background:none;border:none;color:var(--text2);cursor:pointer;font-size:13px;display:flex;align-items:center;gap:4px;">← Back</button>
+          <div class="pay-amount-pill" id="method-amount-pill">₹0</div>
+        </div>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:16px;">How would you like to pay?</div>
+        <div class="pay-method-grid">
+          <div class="pay-method-card" onclick="goToDirectPay()">
+            <div class="pay-method-icon">⚡</div>
+            <div class="pay-method-name">Direct Pay</div>
+            <div class="pay-method-desc">Opens your UPI app instantly with amount pre-filled</div>
+            <div class="trending-tag"><span class="tag-trending">Trending</span></div>
+          </div>
+          <div class="pay-method-card" onclick="goToQRPay()">
+            <div class="pay-method-icon">▣</div>
+            <div class="pay-method-name">QR Pay</div>
+            <div class="pay-method-desc">Scan QR code with any UPI app to pay</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 3: Direct Pay -->
+      <div class="pay-view" id="pv-direct">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <button onclick="goToMethodSelect()" style="background:none;border:none;color:var(--text2);cursor:pointer;font-size:13px;">← Back</button>
+          <div style="font-family:var(--font-display);font-size:16px;font-weight:700;">Direct Pay</div>
+          <div class="pay-amount-pill" id="direct-amount-pill" style="margin-left:auto;">₹0</div>
+        </div>
+        <div class="pay-timer-wrap">
+          <div class="timer-display" id="direct-timer">10:00</div>
+          <div style="font-size:11px;color:var(--text3);">Complete payment before time expires</div>
+        </div>
+        <div style="background:var(--green-dim);border:1px solid rgba(29,185,84,0.2);border-radius:12px;padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green2)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <div><div style="font-size:12px;font-weight:700;color:var(--green2);">Fast & Secure</div><div style="font-size:11px;color:var(--text2);">Amount pre-filled in your UPI app</div></div>
+        </div>
+        <div class="pay-upi-box">
+          <div><div class="pay-upi-label">UPI ID</div><div class="pay-upi-val" id="direct-upi-id">—</div></div>
+          <button class="copy-btn" onclick="copyText(document.getElementById('direct-upi-id').textContent,this)">Copy</button>
+        </div>
+        <div class="pay-upi-box">
+          <div><div class="pay-upi-label">Account Name</div><div style="font-size:14px;font-weight:600;" id="direct-upi-name">—</div></div>
+        </div>
+        <div class="pay-upi-box" style="margin-bottom:18px;">
+          <div><div class="pay-upi-label">Amount</div><div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--gold2);" id="direct-upi-amount">₹0</div></div>
+        </div>
+        <button class="btn btn-green btn-full btn-lg" id="direct-pay-btn" onclick="doDirectPay()">Pay Now — Opens UPI App</button>
+        <div style="text-align:center;font-size:10px;color:var(--text3);margin-top:6px;">GPay · PhonePe · Paytm · Any UPI App</div>
+        <div class="utr-section">
+          <div class="msg-error" id="direct-dep-err"></div>
+          <div class="msg-success" id="direct-dep-ok"></div>
+          <div class="form-group" style="margin-bottom:10px;">
+            <label class="form-label">UTR / Transaction ID</label>
+            <input class="form-input" id="direct-utr-input" placeholder="Enter UTR after payment">
+          </div>
+          <button class="btn btn-gold btn-full" id="direct-submit-btn" onclick="submitDeposit('direct')">Submit Payment Proof</button>
+        </div>
+      </div>
+
+      <!-- VIEW 4: QR Pay -->
+      <div class="pay-view" id="pv-qr">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <button onclick="goToMethodSelect()" style="background:none;border:none;color:var(--text2);cursor:pointer;font-size:13px;">← Back</button>
+          <div style="font-family:var(--font-display);font-size:16px;font-weight:700;">QR Pay</div>
+          <div class="pay-amount-pill" id="qr-amount-pill" style="margin-left:auto;">₹0</div>
+        </div>
+        <div class="pay-timer-wrap">
+          <div class="timer-display" id="qr-timer">10:00</div>
+          <div style="font-size:11px;color:var(--text3);">Complete payment before time expires</div>
+        </div>
+        <div class="pay-upi-box" style="margin-bottom:12px;">
+          <div><div class="pay-upi-label">UPI ID</div><div class="pay-upi-val" id="qr-upi-id">—</div></div>
+          <button class="copy-btn" onclick="copyText(document.getElementById('qr-upi-id').textContent,this)">Copy</button>
+        </div>
+        <div style="text-align:center;margin-bottom:14px;">
+          <!-- QR Load Button -->
+          <div id="qr-load-wrap">
+            <div class="qr-load-btn" onclick="loadQR()">
+              <div class="qr-load-btn-icon">▣</div>
+              <div class="qr-load-btn-text">Load QR Code</div>
+              <div style="font-size:10px;color:var(--text3);">Tap to generate</div>
+            </div>
+          </div>
+          <!-- QR Image (hidden until loaded) -->
+          <div id="qr-img-wrap" style="display:none;">
+            <div class="qr-img-wrap"><img id="qr-img" src="" alt="QR"/></div>
+            <div style="font-size:11px;color:var(--text3);margin-top:8px;">Scan with GPay, PhonePe, Paytm</div>
+          </div>
+          <div id="qr-loading" style="display:none;padding:20px;"><div class="spinner" style="margin:auto"></div></div>
+        </div>
+        <div class="utr-section">
+          <div class="msg-error" id="qr-dep-err"></div>
+          <div class="msg-success" id="qr-dep-ok"></div>
+          <div class="form-group" style="margin-bottom:10px;">
+            <label class="form-label">UTR / Transaction ID</label>
+            <input class="form-input" id="qr-utr-input" placeholder="Enter UTR after payment">
+          </div>
+          <button class="btn btn-gold btn-full" id="qr-submit-btn" onclick="submitDeposit('qr')">Submit Payment Proof</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- FLOAT WIDGET -->
+<div class="float-widget" id="float-widget">
+  <button class="float-btn float-tg" data-tooltip="Telegram" onclick="openTG()"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></button>
+  <button class="float-btn float-help" data-tooltip="Support" onclick="openHelp()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg></button>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js"></script>
+<script src="config_8m2kx.js"></script>
+<script>
+let currentUser=null,userData=null;
+let siteSettings={tg:'https://t.me/adtgroups',help:'https://wa.me/919999999999',upiAccounts:[],depositBoxes:[],minDeposit:100,maxDeposit:10000,minWithdraw:100,maxWithdraw:0,referralReward:25,referralMinDeposit:200};
+let selectedAmount=0,selectedUPI=null,payTimerInterval=null,payTimerSecs=600,activeTimerEl=null;
+let claimTimers={};
+
+document.getElementById('topbar-date').textContent=new Date().toLocaleDateString('en-IN',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
+
+// AUTH GUARD
+auth.onAuthStateChanged(async user=>{
+  if(!user){window.location.replace('/home');return;}
+  currentUser=user;
+  try{
+    const doc=await db.collection('users').doc(user.uid).get();
+    if(doc.exists){
+      userData=doc.data();
+      if(userData.role==='admin'){window.location.href='admin.html';return;}
+      // Phone verification check — only block if explicitly false (new users)
+      // Existing users without phoneVerified field are allowed through
+      if(userData.phoneVerified===false){
+        await auth.signOut();
+        window.location.href='/home';
+        return;
+      }
+      renderUserData();
+    }
+  }catch(e){}
+  hideSplash();
+  loadSettings();
+  loadOverviewProducts();
+  loadCategoryData();
+});
+
+function renderUserData(){
+  if(!userData)return;
+  const init=(userData.name||'U')[0].toUpperCase();
+  document.getElementById('sb-av').textContent=init;
+  document.getElementById('sb-name').textContent=userData.name||'Investor';
+  document.getElementById('greet-name').textContent=(userData.name||'Investor').split(' ')[0];
+  const topbarAv=document.getElementById('topbar-av');if(topbarAv)topbarAv.textContent=init;
+  const topbarName=document.getElementById('topbar-name');if(topbarName)topbarName.textContent=(userData.name||'Investor').split(' ')[0];
+  document.getElementById('d-balance').textContent=formatINR(userData.balance||0);
+  document.getElementById('d-invested').textContent=formatINR(userData.invested||0);
+  document.getElementById('d-returns').textContent=formatINR(userData.returns||0);
+  document.getElementById('d-portfolio').textContent=formatINR((userData.invested||0)+(userData.returns||0));
+  document.getElementById('with-bal-display').textContent=formatINR(userData.balance||0);
+  const wrEl=document.getElementById('with-returnable');if(wrEl)wrEl.textContent=formatINR(userData.returns||0);
+}
+
+async function loadSettings(){
+  try{
+    const doc=await db.collection('settings').doc('site').get();
+    if(doc.exists) siteSettings={...siteSettings,...doc.data()};
+  }catch(e){}
+  renderDepositBoxes();
+  if(userData&&currentUser){
+    const rc=userData.referralCode||generateRefCode(currentUser.uid);
+    document.getElementById('ref-code-val').textContent=rc;
+    document.getElementById('ref-link-val').textContent=window.location.origin+'/?ref='+rc;
+    document.getElementById('ref-note-text').textContent=`Earn ${formatINR(siteSettings.referralReward||25)} for each friend who deposits ${formatINR(siteSettings.referralMinDeposit||200)}+`;
+    loadReferralStats();
+  }
+}
+
+async function loadCategoryData(){
+  try{
+    const snap=await db.collection('categories').get();
+    snap.forEach(d=>{
+      const cat=d.data(),id=d.id;
+      if(cat.image){const el=document.getElementById('bcat-img-'+id);if(el)el.style.backgroundImage=`url('${cat.image}')`;}
+      if(cat.name){const el=document.getElementById('bcat-name-'+id);if(el)el.textContent=cat.name;}
+      if(cat.description){const el=document.getElementById('bcat-desc-'+id);if(el)el.textContent=cat.description;}
+    });
+  }catch(e){}
+}
+
+// ── DEPOSIT MODAL ──────────────────────────────────────────
+function openDepositModal(){
+  selectedAmount=0;selectedUPI=null;
+  clearInterval(payTimerInterval);
+  // Reset all views
+  showPayView('pv-amount');
+  document.getElementById('custom-amount-wrap').style.display='none';
+  document.getElementById('custom-amount-input').value='';
+  document.querySelectorAll('.amount-box').forEach(b=>b.classList.remove('selected'));
+  hideMsg('dep-amount-err');
+  document.getElementById('dep-modal-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  closeSidebar();
+}
+
+function closeDepositModal(){
+  clearInterval(payTimerInterval);
+  document.getElementById('dep-modal-overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+document.getElementById('dep-modal-overlay').addEventListener('click',e=>{
+  if(e.target===document.getElementById('dep-modal-overlay')) closeDepositModal();
+});
+
+function showPayView(id){
+  document.querySelectorAll('.pay-view').forEach(v=>v.classList.remove('active'));
+  const el=document.getElementById(id);
+  if(el)el.classList.add('active');
+  // Update modal title
+  const titles={
+    'pv-amount':'Deposit Funds',
+    'pv-method':'Choose Payment Method',
+    'pv-direct':'Direct Pay',
+    'pv-qr':'QR Pay'
+  };
+  document.getElementById('dep-modal-title').textContent=titles[id]||'Deposit';
+}
+
+function goToAmountSelect(){
+  clearInterval(payTimerInterval);
+  showPayView('pv-amount');
+}
+
+function goToMethodSelect(){
+  // Validate amount
+  const customWrap=document.getElementById('custom-amount-wrap');
+  if(customWrap.style.display!=='none'){
+    const n=parseInt(document.getElementById('custom-amount-input').value);
+    const err=validateCustomAmount(n,siteSettings.minDeposit,siteSettings.maxDeposit);
+    if(err){showMsg('dep-amount-err',err);return;}
+    selectedAmount=n;
+  }
+  if(!selectedAmount||selectedAmount<=0){showMsg('dep-amount-err','Please select or enter an amount.');return;}
+  // Pick random UPI
+  const accounts=(siteSettings.upiAccounts||[]).filter(a=>a.enabled!==false);
+  selectedUPI=accounts.length?randomFrom(accounts):{upiId:'adtgroups@upi',holderName:'ADT GROUPS',qrUrl:''};
+  document.getElementById('method-amount-pill').textContent=formatINR(selectedAmount);
+  showPayView('pv-method');
+}
+
+function goToDirectPay(){
+  if(!selectedUPI||!selectedAmount)return;
+  document.getElementById('direct-amount-pill').textContent=formatINR(selectedAmount);
+  document.getElementById('direct-upi-id').textContent=selectedUPI.upiId;
+  document.getElementById('direct-upi-name').textContent=selectedUPI.holderName||'ADT GROUPS';
+  document.getElementById('direct-upi-amount').textContent=formatINR(selectedAmount);
+  document.getElementById('direct-utr-input').value='';
+  hideMsg('direct-dep-err');hideMsg('direct-dep-ok');
+  showPayView('pv-direct');
+  startPayTimer('direct-timer');
+}
+
+function goToQRPay(){
+  if(!selectedUPI||!selectedAmount)return;
+  document.getElementById('qr-amount-pill').textContent=formatINR(selectedAmount);
+  document.getElementById('qr-upi-id').textContent=selectedUPI.upiId;
+  // Reset QR state
+  document.getElementById('qr-load-wrap').style.display='block';
+  document.getElementById('qr-img-wrap').style.display='none';
+  document.getElementById('qr-loading').style.display='none';
+  document.getElementById('qr-utr-input').value='';
+  hideMsg('qr-dep-err');hideMsg('qr-dep-ok');
+  showPayView('pv-qr');
+  startPayTimer('qr-timer');
+}
+
+function loadQR(){
+  if(!selectedUPI||!selectedAmount)return;
+  document.getElementById('qr-load-wrap').style.display='none';
+  document.getElementById('qr-loading').style.display='block';
+  const deepLink=upiDeepLink(selectedUPI.upiId,selectedAmount,selectedUPI.holderName||'ADT GROUPS');
+  const qrSrc=selectedUPI.qrUrl||qrCodeUrl(deepLink,200);
+  const img=document.getElementById('qr-img');
+  img.onload=()=>{
+    document.getElementById('qr-loading').style.display='none';
+    document.getElementById('qr-img-wrap').style.display='block';
+  };
+  img.onerror=()=>{
+    document.getElementById('qr-loading').style.display='none';
+    document.getElementById('qr-img-wrap').style.display='block';
+    img.src=qrCodeUrl(deepLink,200); // fallback to auto-gen
+  };
+  img.src=qrSrc;
+}
+
+function doDirectPay(){
+  if(!selectedUPI||!selectedAmount)return;
+  const link=upiDeepLink(selectedUPI.upiId,selectedAmount,selectedUPI.holderName||'ADT GROUPS');
+  window.open(link,'_blank');
+}
+
+// TIMER
+function startPayTimer(elId){
+  clearInterval(payTimerInterval);
+  payTimerSecs=600;
+  activeTimerEl=elId;
+  updatePayTimer();
+  payTimerInterval=setInterval(()=>{
+    payTimerSecs--;
+    updatePayTimer();
+    if(payTimerSecs<=0){
+      clearInterval(payTimerInterval);
+      const errId=elId==='direct-timer'?'direct-dep-err':'qr-dep-err';
+      showMsg(errId,t('timer_expired'));
+      setTimeout(()=>{closeDepositModal();},2500);
+    }
+  },1000);
+}
+
+function updatePayTimer(){
+  const el=document.getElementById(activeTimerEl);
+  if(!el)return;
+  el.textContent=formatTimer(payTimerSecs);
+  el.classList.toggle('urgent',payTimerSecs<=60);
+}
+
+// SUBMIT DEPOSIT
+async function submitDeposit(type){
+  const utrId=type==='direct'?'direct-utr-input':'qr-utr-input';
+  const errId=type==='direct'?'direct-dep-err':'qr-dep-err';
+  const okId=type==='direct'?'direct-dep-ok':'qr-dep-ok';
+  const btnId=type==='direct'?'direct-submit-btn':'qr-submit-btn';
+  const utr=document.getElementById(utrId).value.trim();
+  if(!utr){showMsg(errId,'Please enter UTR / Transaction ID.');return;}
+  if(!selectedAmount||selectedAmount<=0){showMsg(errId,'Invalid amount. Please restart.');return;}
+  const btn=document.getElementById(btnId);
+  btn.disabled=true;btn.textContent='Submitting...';
+  try{
+    const txnId=generateTxnId();
+    await db.collection('transactions').doc(txnId).set({
+      txnId,userId:currentUser.uid,userName:userData?userData.name:'',
+      userEmail:currentUser.email,type:'Deposit',amount:selectedAmount,utr,
+      upiId:selectedUPI?selectedUPI.upiId:'',upiHolder:selectedUPI?selectedUPI.holderName:'',
+      payMethod:type,status:'pending',
+      createdAt:firebase.firestore.FieldValue.serverTimestamp()
+    });
+    clearInterval(payTimerInterval);
+    showMsg(okId,t('deposit_sent'),'success');
+    setTimeout(()=>closeDepositModal(),3000);
+  }catch(e){showMsg(errId,'Error: '+e.message);}
+  finally{btn.disabled=false;btn.textContent='Submit Payment Proof';}
+}
+
+// DEPOSIT BOXES
+function renderDepositBoxes(){
+  const grid=document.getElementById('amount-boxes-grid');
+  const defaultBoxes=[
+    {amount:100,tags:[]},{amount:200,tags:[]},
+    {amount:500,tags:['trending','best']},{amount:1000,tags:[]},
+    {amount:'custom',tags:[]}
+  ];
+  const boxes=(siteSettings.depositBoxes&&siteSettings.depositBoxes.length)?siteSettings.depositBoxes:defaultBoxes;
+  grid.innerHTML=boxes.map(b=>{
+    if(b.amount==='custom'){
+      return `<div class="amount-box custom-box" onclick="selectCustom(this)"><div class="amount-val">Custom</div><div class="amount-tags"><span class="badge badge-muted">Any Amount</span></div></div>`;
+    }
+    const tags=(b.tags||[]).map(tg=>{
+      if(tg==='trending')return '<span class="tag-trending">Trending</span>';
+      if(tg==='best')return '<span class="tag-best">Best Value</span>';
+      if(tg==='hot')return '<span class="tag-hot">Hot</span>';
+      if(tg==='new')return '<span class="tag-new">New</span>';
+      return `<span class="badge badge-muted">${tg}</span>`;
+    }).join('');
+    return `<div class="amount-box" onclick="selectAmount(${b.amount},this)"><div class="amount-val">${formatINR(b.amount)}</div>${tags?`<div class="amount-tags">${tags}</div>`:''}</div>`;
+  }).join('');
+}
+
+function selectAmount(amt,el){
+  document.querySelectorAll('.amount-box').forEach(b=>b.classList.remove('selected'));
+  if(el)el.classList.add('selected');
+  selectedAmount=amt;
+  document.getElementById('custom-amount-wrap').style.display='none';
+  hideMsg('dep-amount-err');
+}
+
+function selectCustom(el){
+  document.querySelectorAll('.amount-box').forEach(b=>b.classList.remove('selected'));
+  if(el)el.classList.add('selected');
+  selectedAmount=0;
+  document.getElementById('custom-amount-wrap').style.display='block';
+  document.getElementById('custom-amount-input').focus();
+  hideMsg('dep-amount-err');
+}
+
+function validateCustomInput(inp){
+  const n=parseInt(inp.value);
+  const hint=document.getElementById('custom-hint');
+  if(!n||n<=0){hint.style.color='var(--text3)';hint.textContent='Multiples of 50 only. e.g. 100, 150, 200...';selectedAmount=0;return;}
+  if(n%50!==0){hint.style.color='var(--red2)';hint.textContent='Must be a multiple of 50 (e.g. 100, 150, 200)';selectedAmount=0;return;}
+  if(siteSettings.minDeposit&&n<siteSettings.minDeposit){hint.style.color='var(--red2)';hint.textContent=`Minimum deposit is ${formatINR(siteSettings.minDeposit)}`;selectedAmount=0;return;}
+  if(siteSettings.maxDeposit&&n>siteSettings.maxDeposit){hint.style.color='var(--red2)';hint.textContent=`Maximum deposit is ${formatINR(siteSettings.maxDeposit)}`;selectedAmount=0;return;}
+  hint.style.color='var(--green2)';hint.textContent='Valid amount';selectedAmount=n;
+}
+
+// ── SAVED ACCOUNTS ──────────────────────────────────────────
+function loadSavedAccounts(){
+  if(!userData)return;
+  const upiVal=userData.savedUPI||'';
+  const bankVal=userData.savedBank||'';
+  const ifscVal=userData.savedIFSC||'';
+
+  // UPI
+  if(upiVal){
+    document.getElementById('upi-saved-val').textContent=upiVal;
+    document.getElementById('upi-saved-display').style.display='block';
+    document.getElementById('upi-add-wrap').style.display='none';
+    const opt=document.getElementById('with-opt-upi');
+    opt.textContent='UPI — '+upiVal;
+    opt.disabled=false;
+  }
+
+  // Bank
+  if(bankVal){
+    document.getElementById('bank-saved-val').textContent=bankVal;
+    document.getElementById('bank-saved-ifsc').textContent='IFSC: '+ifscVal;
+    document.getElementById('bank-saved-display').style.display='block';
+    document.getElementById('bank-add-wrap').style.display='none';
+    const opt=document.getElementById('with-opt-bank');
+    opt.textContent='Bank — '+bankVal;
+    opt.disabled=false;
+  }
+}
+
+async function saveUPIAccount(){
+  const upi=document.getElementById('with-upi').value.trim();
+  if(!upi||!upi.includes('@')){showMsg('with-err','Please enter a valid UPI ID (e.g. name@upi)');return;}
+  if(userData.savedUPI){showMsg('with-err','UPI account already saved. Contact support to change.');return;}
+  try{
+    await db.collection('users').doc(currentUser.uid).update({savedUPI:upi});
+    userData.savedUPI=upi;
+    showMsg('with-ok','✅ UPI account saved successfully!','success');
+    loadSavedAccounts();
+  }catch(e){showMsg('with-err','Error: '+e.message);}
+}
+
+async function saveBankAccount(){
+  const bank=document.getElementById('with-bank').value.trim();
+  const ifsc=document.getElementById('with-ifsc').value.trim();
+  if(!bank||bank.length<9){showMsg('with-err','Please enter a valid account number.');return;}
+  if(!ifsc||ifsc.length<11){showMsg('with-err','Please enter a valid IFSC code.');return;}
+  if(userData.savedBank){showMsg('with-err','Bank account already saved. Contact support to change.');return;}
+  try{
+    await db.collection('users').doc(currentUser.uid).update({savedBank:bank,savedIFSC:ifsc});
+    userData.savedBank=bank;userData.savedIFSC=ifsc;
+    showMsg('with-ok','✅ Bank account saved successfully!','success');
+    loadSavedAccounts();
+  }catch(e){showMsg('with-err','Error: '+e.message);}
+}
+
+// ── WITHDRAW ────────────────────────────────────────────────
+async function loadTodayWithdrawCount(){
+  try{
+    const today=new Date();today.setHours(0,0,0,0);
+    const snap=await db.collection('transactions').where('userId','==',currentUser.uid).where('type','==','Withdraw').get();
+    const cnt=snap.docs.filter(d=>{const ts=d.data().createdAt;if(!ts)return false;const dt=ts.toDate?ts.toDate():new Date(ts);return dt>=today;}).length;
+    const fill=document.getElementById('with-count-fill');
+    const badge=document.getElementById('with-count-badge');
+    const note=document.getElementById('with-limit-note');
+    if(fill)fill.style.width=Math.min(100,Math.round(cnt/3*100))+'%';
+    if(badge)badge.textContent=cnt+' / 3';
+    if(note){
+      if(cnt>=3){note.style.color='var(--red2)';note.textContent='⛔ Daily limit reached. Resets at midnight.';if(fill)fill.style.background='var(--red)';if(badge)badge.style.color='var(--red2)';}
+      else{note.style.color='var(--text3)';note.textContent=`${3-cnt} withdrawal${3-cnt===1?'':'s'} remaining today. Resets at midnight.`;}
+    }
+    return cnt;
+  }catch(e){return 0;}
+}
+
+async function submitWithdraw(){
+  const minWith=siteSettings.minWithdraw||100;
+  const maxWith=siteSettings.maxWithdraw||0;
+  const amount=parseInt(document.getElementById('with-amount').value);
+  const method=document.getElementById('with-method').value;
+  const withdrawable=userData?.returns||0;
+
+  hideMsg('with-err');hideMsg('with-ok');
+
+  if(!amount||amount<minWith){showMsg('with-err',`Minimum withdrawal is ${formatINR(minWith)}.`);return;}
+  if(maxWith&&amount>maxWith){showMsg('with-err',`Maximum withdrawal is ${formatINR(maxWith)}.`);return;}
+  if(!method){showMsg('with-err','Please select a payout account.');return;}
+  if(withdrawable<amount){showMsg('with-err',`Available: ${formatINR(withdrawable)}. Insufficient balance.`);return;}
+
+  // Get saved account details
+  let account='',ifsc='';
+  if(method==='upi'){
+    if(!userData.savedUPI){showMsg('with-err','Please save your UPI account first.');return;}
+    account=userData.savedUPI;
+  } else {
+    if(!userData.savedBank){showMsg('with-err','Please save your bank account first.');return;}
+    account=userData.savedBank;ifsc=userData.savedIFSC||'';
+  }
+
+  // 3/day limit
+  const cnt=await loadTodayWithdrawCount();
+  if(cnt>=3){showMsg('with-err','Daily limit reached (3/day). Try again tomorrow!');return;}
+
+  const btn=document.getElementById('with-submit-btn');
+  btn.disabled=true;btn.textContent='Processing...';
+  try{
+    const txnId=generateTxnId();
+    const batch=db.batch();
+    batch.set(db.collection('transactions').doc(txnId),{
+      txnId,userId:currentUser.uid,userName:userData?.name||'',
+      userEmail:currentUser.email,type:'Withdraw',amount,
+      account,ifsc,method,
+      status:'pending',createdAt:firebase.firestore.FieldValue.serverTimestamp()
+    });
+    // Deduct immediately
+    batch.update(db.collection('users').doc(currentUser.uid),{
+      returns:firebase.firestore.FieldValue.increment(-amount),
+      balance:firebase.firestore.FieldValue.increment(-amount)
+    });
+    await batch.commit();
+    if(userData){userData.returns=(userData.returns||0)-amount;userData.balance=(userData.balance||0)-amount;renderUserData();}
+    showMsg('with-ok','✅ Withdrawal submitted! Admin will process within 24-48 hours.','success');
+    document.getElementById('with-amount').value='';
+    document.getElementById('with-method').value='';
+    await loadTodayWithdrawCount();
+  }catch(e){showMsg('with-err','Error: '+e.message);}
+  finally{const b=document.getElementById('with-submit-btn');if(b){b.disabled=false;b.textContent='Withdraw Now →';}}
+}
+
+// MY PRODUCTS + CLAIM
+async function loadMyProducts(){
+  const el=document.getElementById('my-prods-list');
+  el.innerHTML='<div class="loader"><div class="spinner"></div></div>';
+  try{
+    let snap;
+    try{snap=await db.collection('investments').where('userId','==',currentUser.uid).where('status','==','active').orderBy('createdAt','desc').get();}
+    catch(e){snap=await db.collection('investments').where('userId','==',currentUser.uid).where('status','==','active').get();}
+    if(snap.empty){
+      el.innerHTML=`<div style="text-align:center;padding:48px;color:var(--text3);"><div style="font-size:15px;color:var(--text2);margin-bottom:6px;">${t('no_investments')}</div><button class="btn btn-gold" style="margin-top:14px;" onclick="showTab('browse',null)">Browse Products</button></div>`;
+      return;
+    }
+    el.innerHTML='';
+    snap.docs.forEach(d=>renderClaimCard(d.id,d.data(),el));
+  }catch(e){el.innerHTML=`<div style="color:var(--red2);padding:20px;">Error loading products: ${e.message}</div>`;}
+}
+
+function renderClaimCard(invId,inv,container){
+  const card=document.createElement('div');
+  card.className='claim-card';card.id='claim-card-'+invId;
+  const total=inv.cycleDays||30,claimed=inv.daysClaimed||0,pct=Math.min(100,Math.round(claimed/total*100));
+  const isComplete=(inv.daysClaimed||0)>=(inv.cycleDays||30);
+  const canClaim=!isComplete&&isClaimAvailable(inv.lastClaimedAt);
+  const msLeft=canClaim?0:timeUntilNextClaim(inv.lastClaimedAt);
+  card.innerHTML=`
+    <div class="claim-header">
+      <div class="claim-icon">${{farming:'🌾',realestate:'🏛️',business:'💼'}[inv.category]||'💼'}</div>
+      <div style="flex:1;">
+        <div class="claim-title">${inv.productName||'Product'}</div>
+        <div class="claim-meta">Day ${claimed}/${total} · ${formatINR(inv.dailyEarning||0)}/day · Total: ${formatINR(inv.totalReturn||0)}</div>
+      </div>
+      <div class="claim-right">
+        <div class="claim-daily">${formatINR(inv.dailyEarning||0)}</div>
+        <div class="claim-daily-label">per day</div>
+      </div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;${isComplete?'background:var(--green);':''}"></div></div>
+    <div class="progress-label">${isComplete?'<span style="color:var(--green);font-weight:700;">✓ Investment Complete</span>':`${claimed} of ${total} days claimed (${pct}%)`}</div>
+    <div id="claim-action-${invId}" style="margin-top:12px;"></div>
+    ${isComplete?'':`<div class="claim-miss-note">Missed claims cannot be recovered. Claim daily at the same time.</div>`}`;
+  container.appendChild(card);
+  renderClaimAction(invId,inv,canClaim,msLeft);
+}
+
+function renderClaimAction(invId,inv,canClaim,msLeft){
+  const el=document.getElementById('claim-action-'+invId);
+  if(!el)return;
+  if((inv.daysClaimed||0)>=(inv.cycleDays||30)){el.innerHTML='<span class="badge badge-blue" style="font-size:13px;padding:8px 16px;">Cycle Complete!</span>';return;}
+  if(canClaim){
+    el.innerHTML=`<button class="btn btn-gold btn-full" onclick="doClaim('${invId}',${inv.dailyEarning||0})">Claim ${formatINR(inv.dailyEarning||0)} Today</button>`;
+  }else{
+    el.innerHTML=`<div><div style="font-size:12px;color:var(--text3);margin-bottom:4px;">Next claim available in:</div><div class="countdown-txt" id="countdown-${invId}">${formatCountdown(msLeft)}</div><button class="btn btn-ghost btn-full" style="margin-top:8px;" disabled>Claimed Today</button></div>`;
+    clearInterval(claimTimers[invId]);
+    claimTimers[invId]=setInterval(()=>{
+      const ms=timeUntilNextClaim(inv.lastClaimedAt);
+      const cd=document.getElementById('countdown-'+invId);
+      if(!cd){clearInterval(claimTimers[invId]);return;}
+      if(ms<=0){clearInterval(claimTimers[invId]);renderClaimAction(invId,inv,true,0);return;}
+      cd.textContent=formatCountdown(ms);
+    },1000);
+  }
+}
+
+async function doClaim(invId,dailyAmt){
+  const btn=document.querySelector(`#claim-action-${invId} button`);
+  if(btn){btn.disabled=true;btn.textContent='Claiming...';}
+  try{
+    const invRef=db.collection('investments').doc(invId);
+    const invDoc=await invRef.get();
+    if(!invDoc.exists)throw new Error('Investment not found.');
+    const inv=invDoc.data();
+    if(!isClaimAvailable(inv.lastClaimedAt))throw new Error('Already claimed today. Come back tomorrow!');
+    if((inv.daysClaimed||0)>=(inv.cycleDays||30))throw new Error('Cycle already complete.');
+    const txnId=generateTxnId();
+    const batch=db.batch();
+    batch.update(invRef,{daysClaimed:firebase.firestore.FieldValue.increment(1),lastClaimedAt:firebase.firestore.FieldValue.serverTimestamp()});
+    batch.update(db.collection('users').doc(currentUser.uid),{balance:firebase.firestore.FieldValue.increment(dailyAmt),returns:firebase.firestore.FieldValue.increment(dailyAmt)});
+    batch.set(db.collection('transactions').doc(txnId),{txnId,userId:currentUser.uid,userName:userData?userData.name:'',userEmail:currentUser.email,type:'Claim',amount:dailyAmt,productId:invId,productName:inv.productName||'',status:'approved',createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+    await batch.commit();
+    if(userData){userData.balance=(userData.balance||0)+dailyAmt;userData.returns=(userData.returns||0)+dailyAmt;renderUserData();}
+    const updatedInv={...inv,daysClaimed:(inv.daysClaimed||0)+1,lastClaimedAt:{toDate:()=>new Date()}};
+    renderClaimAction(invId,updatedInv,false,timeUntilNextClaim({toDate:()=>new Date()}));
+    alert(`Claimed ${formatINR(dailyAmt)} successfully! Added to your wallet.`);
+  }catch(e){alert('Error: '+e.message);if(btn){btn.disabled=false;btn.textContent=`Claim ${formatINR(dailyAmt)} Today`;}}
+}
+
+// OVERVIEW PRODUCTS
+async function loadOverviewProducts(){
+  const el=document.getElementById('overview-products');
+  try{
+    let snap;
+    try{snap=await db.collection('investments').where('userId','==',currentUser.uid).where('status','==','active').orderBy('createdAt','desc').limit(3).get();}
+    catch(e){snap=await db.collection('investments').where('userId','==',currentUser.uid).where('status','==','active').get();}
+    if(snap.empty){
+      el.innerHTML=`<div style="text-align:center;padding:28px;color:var(--text3);"><div style="font-size:13px;margin-bottom:10px;">${t('no_investments')}</div><button class="btn btn-gold" onclick="showTab('browse',null)">Browse Products</button></div>`;
+      return;
+    }
+    el.innerHTML=snap.docs.slice(0,3).map(d=>{
+      const inv=d.data();
+      const claimed=inv.daysClaimed||0,total=inv.cycleDays||30;
+      const isDone=claimed>=total;
+      const canClaim=!isDone&&isClaimAvailable(inv.lastClaimedAt);
+      return `<div class="claim-card" style="cursor:pointer;" onclick="showTab('myproducts',null)">
+        <div class="claim-header">
+          <div class="claim-icon">${{farming:'🌾',realestate:'🏛️',business:'💼'}[inv.category]||'💼'}</div>
+          <div><div class="claim-title">${inv.productName||'Product'}</div><div class="claim-meta">Day ${claimed}/${total} · ${formatINR(inv.dailyEarning||0)}/day</div></div>
+          <div class="claim-right">${isDone?'<span class="badge badge-blue">✓ Completed</span>':canClaim?isDone?'<span class="badge badge-blue">✓ Completed</span>':canClaim?'<span class="badge badge-gold">Claim Available</span>':'<span class="badge badge-green">Claimed Today</span>'}</div>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${Math.min(100,Math.round(claimed/total*100))}%;${isDone?'background:var(--green);':''}}"></div></div>
+      </div>`;
+    }).join('');
+  }catch(e){el.innerHTML='';}
+}
+
+// HISTORIES
+async function loadDepHistory(){
+  const tbody=document.getElementById('dep-hist-body');
+  try{
+    let snap;
+    try{snap=await db.collection('transactions').where('userId','==',currentUser.uid).where('type','==','Deposit').orderBy('createdAt','desc').get();}
+    catch(e){snap=await db.collection('transactions').where('userId','==',currentUser.uid).where('type','==','Deposit').get();}
+    if(snap.empty){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:30px;color:var(--text3);">No deposits found.</td></tr>';return;}
+    tbody.innerHTML=snap.docs.map(d=>{const txn=d.data();return `<tr>
+      <td><span style="font-family:var(--font-mono);font-size:10px;color:var(--text2);">${txn.txnId||d.id}</span><br><button class="copy-btn" onclick="copyText('${txn.txnId||d.id}',this)">copy</button></td>
+      <td style="font-weight:600;color:var(--gold2);">${formatINR(txn.amount)}</td>
+      <td style="font-family:var(--font-mono);font-size:11px;">${txn.utr||'—'}</td>
+      <td style="font-size:11px;color:var(--text3);">${formatDateTime(txn.createdAt)}</td>
+      <td>${statusBadge(txn.status)}</td>
+    </tr>`;}).join('');
+  }catch(e){tbody.innerHTML=`<tr><td colspan="5" style="color:var(--red2);padding:20px;">Error: ${e.message}</td></tr>`;}
+}
+
+async function loadWithHistory(){
+  const tbody=document.getElementById('with-hist-body');
+  try{
+    let snap;
+    try{snap=await db.collection('transactions').where('userId','==',currentUser.uid).where('type','==','Withdraw').orderBy('createdAt','desc').get();}
+    catch(e){snap=await db.collection('transactions').where('userId','==',currentUser.uid).where('type','==','Withdraw').get();}
+    if(snap.empty){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:30px;color:var(--text3);">No withdrawals found.</td></tr>';return;}
+    tbody.innerHTML=snap.docs.map(d=>{const txn=d.data();return `<tr>
+      <td><span style="font-family:var(--font-mono);font-size:10px;color:var(--text2);">${txn.txnId||d.id}</span><br><button class="copy-btn" onclick="copyText('${txn.txnId||d.id}',this)">copy</button></td>
+      <td style="font-weight:600;color:var(--red2);">${formatINR(txn.amount)}</td>
+      <td style="font-size:12px;color:var(--text2);">${txn.account||'—'}</td>
+      <td style="font-size:11px;color:var(--text3);">${formatDateTime(txn.createdAt)}</td>
+      <td>${statusBadge(txn.status)}</td>
+    </tr>`;}).join('');
+  }catch(e){tbody.innerHTML=`<tr><td colspan="5" style="color:var(--red2);padding:20px;">Error: ${e.message}</td></tr>`;}
+}
+
+// REFERRAL
+async function loadReferralStats(){
+  if(!userData||!currentUser)return;
+  try{
+    const rc=userData.referralCode||generateRefCode(currentUser.uid);
+    const snap=await db.collection('referrals').where('refCode','==',rc).get();
+    let earned=0,pending=0;
+    snap.docs.forEach(d=>{const r=d.data();if(r.status==='paid')earned+=(siteSettings.referralReward||25);else pending+=(siteSettings.referralReward||25);});
+    document.getElementById('ref-count').textContent=snap.size;
+    document.getElementById('ref-earned').textContent=formatINR(earned);
+    document.getElementById('ref-pending').textContent=formatINR(pending);
+  }catch(e){}
+}
+
+// TABS
+function showTab(tab,navEl){
+  document.querySelectorAll('.tab-section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(navEl)navEl.classList.add('active');
+  const titles={overview:'Dashboard',withdraw:'Withdraw Funds',browse:'Browse Products',myproducts:'My Products','dep-history':'Deposit History','with-history':'Withdrawal History',referral:'Referral'};
+  document.getElementById('topbar-title').textContent=titles[tab]||'Dashboard';
+  if(tab==='myproducts')loadMyProducts();
+  if(tab==='dep-history')loadDepHistory();
+  if(tab==='with-history')loadWithHistory();
+  if(tab==='withdraw'&&userData){
+    const minWith=siteSettings.minWithdraw||100;
+    const wrEl=document.getElementById('with-returnable');if(wrEl)wrEl.textContent=formatINR(userData.returns||0);
+    document.getElementById('with-bal-display').textContent=formatINR(userData.balance||0);
+    const noteEl=document.getElementById('with-min-note');if(noteEl)noteEl.textContent=`Minimum withdrawal: ${formatINR(minWith)}`;
+    const hintEl=document.getElementById('with-amount-hint');if(hintEl)hintEl.textContent=`Min: ${formatINR(minWith)} · Available: ${formatINR(userData.returns||0)}`;
+    const inp=document.getElementById('with-amount');if(inp)inp.placeholder=`Enter amount (min ${formatINR(minWith)})`;
+    loadSavedAccounts();
+    loadTodayWithdrawCount();
+  }
+  closeSidebar();
+}
+
+
+// PROFILE POPUP
+function openProfilePopup(){
+  if(!userData||!currentUser)return;
+  const init=(userData.name||'U')[0].toUpperCase();
+  document.getElementById('prof-av').textContent=init;
+  document.getElementById('prof-name').textContent=userData.name||'Investor';
+  document.getElementById('prof-email').textContent=currentUser.email||'—';
+  document.getElementById('prof-bal').textContent=formatINR(userData.balance||0);
+  document.getElementById('prof-inv').textContent=formatINR(userData.invested||0);
+  document.getElementById('prof-ret').textContent=formatINR(userData.returns||0);
+  document.getElementById('prof-ref').textContent=userData.referralCode||generateRefCode(currentUser.uid);
+  document.getElementById('profile-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeProfilePopup(){
+  document.getElementById('profile-overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function closeProfileOnOverlay(e){
+  if(e.target===document.getElementById('profile-overlay')) closeProfilePopup();
+}
+async function doLogout(){
+  closeProfilePopup();
+  clearInterval(payTimerInterval);
+  Object.values(claimTimers).forEach(clearInterval);
+  await auth.signOut();
+  window.location.href='/home';
+}
+function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('sb-overlay').classList.add('open');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sb-overlay').classList.remove('open');}
+function openTG(){window.open(siteSettings.tg||'https://t.me/adtgroups','_blank');}
+function openHelp(){window.location.href='/support';}
+window.addEventListener('load',()=>initDraggable('float-widget'));
+</script>
+</body>
+</html>
