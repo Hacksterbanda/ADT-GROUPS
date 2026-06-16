@@ -1,6 +1,5 @@
 {
   "hosting": {
-    "site": "adtgroupsltd",
     "public": ".",
     "ignore": [
       "firebase.json",
@@ -8,20 +7,20 @@
     ],
     "rewrites": [
       {
+        "source": "/home",
+        "destination": "/Home_n4x8k2.html"
+      },
+      {
         "source": "/dashboard",
-        "destination": "/dashboard.html"
+        "destination": "/Dash_9f3k2.html"
       },
       {
         "source": "/products",
-        "destination": "/products.html"
+        "destination": "/Produ_p82mx.html"
       },
       {
         "source": "/support",
-        "destination": "/support.html"
-      },
-      {
-        "source": "/admin",
-        "destination": "/admin.html"
+        "destination": "/Suppo_q5w91.html"
       }
     ]
   }
